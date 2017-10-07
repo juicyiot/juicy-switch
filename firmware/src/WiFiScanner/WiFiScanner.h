@@ -9,7 +9,6 @@ using namespace std;
 class WiFiScanner {
 public:
 	WiFiScanner();
-	~WiFiScanner();
 	vector<string> networks();
 };
 

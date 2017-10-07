@@ -7,10 +7,6 @@ WiFiScanner::WiFiScanner() {
 	delay(100);
 }
 
-WiFiScanner::~WiFiScanner() {
-	WiFi.disconnect();
-}
-
 vector<string> WiFiScanner::networks() {
 	int n = WiFi.scanNetworks();
 
