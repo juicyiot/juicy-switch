@@ -1,7 +1,21 @@
 #include <Arduino.h>
+#include "WiFiScanner/WiFiScanner.h"
+
+#include <vector>
+#include <string>
 
 void setup() {
-    // put your setup code here, to run once:
+    Serial.begin(115200);
+	delay(3000);
+
+	WiFiScanner scanner;
+	vector<string> networks = scanner.networks();
+
+	int i = 0;
+	for(auto &n : networks) {
+		Serial.printf("[%d]: ", i++);
+		Serial.println(n.c_str());
+	}
 }
 
 void loop() {
