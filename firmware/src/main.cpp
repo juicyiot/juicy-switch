@@ -1,8 +1,12 @@
 #include <Arduino.h>
 #include "WiFiScanner/WiFiScanner.h"
+#include "ConfigServer/ConfigServer.h"
+#include <ESP8266WebServer.h>
 
 #include <vector>
 #include <string>
+
+ESP8266WebServer server(80);
 
 void setup() {
     Serial.begin(115200);
@@ -16,6 +20,9 @@ void setup() {
 		Serial.printf("[%d]: ", i++);
 		Serial.println(n.c_str());
 	}
+
+	ConfigServer config("juicy_switch", "password");
+	config.run();
 }
 
 void loop() {
