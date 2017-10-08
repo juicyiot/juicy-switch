@@ -17,10 +17,36 @@ void HttpHandler::handleRoot() {
 }
 
 void HttpHandler::handleConfig() {
-	server.send(200, "text/plain", "juicy config: config");
+	initializeConnection();
+	server.sendContent(
+		"<html><head></head><body>"
+		"<h2>Select your WiFi network</h2>"
+		"<table><tr><th>#</th><th align='left'>SSID</th></tr>"
+	);
+	if (numNetworks > 0) {
+		for (int i = 0; i < numNetworks; i++) {
+			server.sendContent(String() + "<tr><td>" + i + "</td><td>" + WiFi.SSID(i) + "</td></td>");
+		}
+	} else {
+		server.sendContent(String() + "<tr><td>-<td><td>No WiFi network found</td></tr>");
+	}
+	server.sendContent(
+		"</table><br>"
+		"<form method='POST' action='configsave'>"
+		"SSID:"
+		"<input type='text' placehoder='ssid' name='ssid'/><br>"
+		"Password:"
+		"<input type='password' placehoder='password' name='password'/><br>"
+		"<input type='submit' value='Connect'/>"
+		"</form>"
+		"</body></html>"
+	);
+	server.client().stop();
 }
 
 void HttpHandler::handleConfigSave() {
+	Serial.println(server.arg("ssid"));
+	Serial.println(server.arg("password"));
 	server.send(200, "text/plain", "juicy config: config save");
 }
 
