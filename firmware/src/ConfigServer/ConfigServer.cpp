@@ -13,9 +13,7 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
 	WiFi.mode(WIFI_STA);
 	WiFi.disconnect();
-	Serial.println("GO SCAN");
 	int numNetworks = WiFi.scanNetworks();
-	Serial.println(numNetworks);
 
 	// Setup access point with provided credentials.
 	WiFi.mode(WIFI_AP);
