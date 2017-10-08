@@ -14,6 +14,7 @@ public:
 private:
 	ESP8266WebServer& server;
 	int numNetworks;
+	void initializeConnection();
 	bool captivePortal();
 	bool isIPAddress(String str);
 	String toString(IPAddress ip);

@@ -6,7 +6,14 @@ void HttpHandler::handleRoot() {
 	if (captivePortal()) {
 		return;
 	}
-	server.send(200, "text/plain", "juicy config: root");
+	initializeConnection();
+	server.sendContent(
+		"<html><head></head><body>"
+		"<h1>Welcome to your Juicy Socket</h1>"
+		"<p>Click <a href='/config'>here</a> to set up the socket's WiFi connection.</p>"
+		"</body></html>"
+	);
+	server.client().stop();
 }
 
 void HttpHandler::handleConfig() {
@@ -26,6 +33,14 @@ void HttpHandler::handleNotFound() {
 		return;
 	}
 	server.send(200, "text/plain", "juicy config: not found");
+}
+
+void HttpHandler::initializeConnection() {
+	server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	server.sendHeader("Pragma", "no-cache");
+	server.sendHeader("Expires", "-1");
+	server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+	server.send(200, "text/html", "");
 }
 
 bool HttpHandler::captivePortal() {
