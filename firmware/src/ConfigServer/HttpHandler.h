@@ -7,6 +7,9 @@ class HttpHandler {
 public:
 	HttpHandler(ESP8266WebServer& server);
 	void handleRoot();
+	void handleConfig();
+	void handleConfigSave();
+	void handleConfigSuccess();
 	void handleNotFound();
 private:
 	ESP8266WebServer& server;

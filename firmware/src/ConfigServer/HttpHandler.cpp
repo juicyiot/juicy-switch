@@ -9,6 +9,18 @@ void HttpHandler::handleRoot() {
 	server.send(200, "text/plain", "juicy config: root");
 }
 
+void HttpHandler::handleConfig() {
+	server.send(200, "text/plain", "juicy config: config");
+}
+
+void HttpHandler::handleConfigSave() {
+	server.send(200, "text/plain", "juicy config: config save");
+}
+
+void HttpHandler::handleConfigSuccess() {
+	server.send(200, "text/plain", "juicy config: config success");
+}
+
 void HttpHandler::handleNotFound() {
 	if(captivePortal()) {
 		return;

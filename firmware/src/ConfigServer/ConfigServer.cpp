@@ -26,6 +26,9 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	HttpHandler handler(webServer);
 
 	webServer.on("/", std::bind(&HttpHandler::handleRoot, handler));
+	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));
+	webServer.on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));
+	webServer.on("/configsuccess", std::bind(&HttpHandler::handleConfigSuccess, handler));
 	webServer.on("/generate_204", std::bind(&HttpHandler::handleRoot, handler)); // Explicit Android captive portal
 	webServer.onNotFound(std::bind(&HttpHandler::handleNotFound, handler)); // Other captive portals
 
