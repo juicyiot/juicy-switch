@@ -12,7 +12,6 @@ public:
 private:
 	DNSServer dnsServer;
 	ESP8266WebServer webServer;
-	void handleRoot();
 };
 
 #endif
