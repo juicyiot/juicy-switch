@@ -10,6 +10,13 @@ static const byte PORT_DNS = 53;
 static const int PORT_WEB = 80;
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
+	// Scan available networks.
+	WiFi.mode(WIFI_STA);
+	WiFi.disconnect();
+	Serial.println("GO SCAN");
+	int numNetworks = WiFi.scanNetworks();
+	Serial.println(numNetworks);
+
 	// Setup access point with provided credentials.
 	WiFi.mode(WIFI_AP);
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
@@ -23,7 +30,7 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 
 	// Setup web server.
 	webServer = ESP8266WebServer(PORT_WEB);
-	HttpHandler handler(webServer);
+	HttpHandler handler(webServer, numNetworks);
 
 	webServer.on("/", std::bind(&HttpHandler::handleRoot, handler));
 	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));

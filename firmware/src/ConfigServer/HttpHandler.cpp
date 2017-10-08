@@ -1,6 +1,6 @@
 #include "HttpHandler.h"
 
-HttpHandler::HttpHandler(ESP8266WebServer& server) : server(server) { }
+HttpHandler::HttpHandler(ESP8266WebServer& server, int numNetworks) : server(server), numNetworks(numNetworks) { }
 
 void HttpHandler::handleRoot() {
 	if (captivePortal()) {

@@ -5,7 +5,7 @@
 
 class HttpHandler {
 public:
-	HttpHandler(ESP8266WebServer& server);
+	HttpHandler(ESP8266WebServer& server, int numNetworks);
 	void handleRoot();
 	void handleConfig();
 	void handleConfigSave();
@@ -13,6 +13,7 @@ public:
 	void handleNotFound();
 private:
 	ESP8266WebServer& server;
+	int numNetworks;
 	bool captivePortal();
 	bool isIPAddress(String str);
 	String toString(IPAddress ip);
