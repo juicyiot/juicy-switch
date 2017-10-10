@@ -1,11 +1,5 @@
 #include <Arduino.h>
 #include "ConfigServer/ConfigServer.h"
-#include <ESP8266WebServer.h>
-
-#include <vector>
-#include <string>
-
-ESP8266WebServer server(80);
 
 void setup() {
     Serial.begin(115200);

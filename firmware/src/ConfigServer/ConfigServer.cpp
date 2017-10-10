@@ -1,7 +1,4 @@
 #include "ConfigServer.h"
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include "HttpHandler.h"
 
 static const IPAddress AP_IP(192, 168, 4, 1);
 static const IPAddress AP_NM(255, 255, 255, 0);
@@ -9,11 +6,14 @@ static const IPAddress AP_NM(255, 255, 255, 0);
 static const byte PORT_DNS = 53;
 static const int PORT_WEB = 80;
 
+ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
+int ConfigServer::numAvailableNetworks = 0;
+
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
 	WiFi.mode(WIFI_STA);
 	WiFi.disconnect();
-	int numNetworks = WiFi.scanNetworks();
+	numAvailableNetworks = WiFi.scanNetworks();
 
 	// Setup access point with provided credentials.
 	WiFi.mode(WIFI_AP);
@@ -27,8 +27,7 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	dnsServer.start(PORT_DNS, "*", AP_IP);
 
 	// Setup web server.
-	webServer = ESP8266WebServer(PORT_WEB);
-	HttpHandler handler(webServer, numNetworks);
+	HttpHandler handler;
 
 	webServer.on("/", std::bind(&HttpHandler::handleRoot, handler));
 	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));
