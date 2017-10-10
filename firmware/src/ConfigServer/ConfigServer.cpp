@@ -4,6 +4,7 @@ ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
 int ConfigServer::numAvailableNetworks = 0;
 credentials_t ConfigServer::networkCredentials;
 bool ConfigServer::shouldConnect = false;
+bool ConfigServer::done = false;
 String ConfigServer::connectionStatus = "NONE";
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
@@ -28,35 +29,40 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	webServer.on("/", std::bind(&HttpHandler::handleRoot, handler));
 	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));
 	webServer.on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));
-	webServer.on("/configsuccess", std::bind(&HttpHandler::handleConfigSuccess, handler));
+	webServer.on("/done", std::bind(&ConfigServer::handleDone, this));
 	webServer.on("/generate_204", std::bind(&HttpHandler::handleRoot, handler)); // Explicit Android captive portal
 	webServer.onNotFound(std::bind(&HttpHandler::handleNotFound, handler)); // Other captive portals
 	webServer.begin();
 }
 
-ConfigServer::~ConfigServer() {
-	webServer.stop();
-	dnsServer.stop();
-}
-
 void ConfigServer::run() {
-	while (true) {
+	while (!done) {
 		if (shouldConnect) {
 			shouldConnect = false;
-			connectToNetwork();
+			int res = connectToNetwork();
+			if (res == WL_CONNECTED) {
+				connectionStatus = "CONNECTION_SUCCESSFUL";
+			} else {
+				connectionStatus = "CONNECTION_FAILED";
+			}
 		}
 		dnsServer.processNextRequest();
 		webServer.handleClient();
 	}
+	webServer.stop();
+	dnsServer.stop();
+	WiFi.mode(WIFI_STA);
+	WiFi.softAPdisconnect(true);
 }
 
-void ConfigServer::connectToNetwork() {
+int ConfigServer::connectToNetwork() {
 	WiFi.disconnect();
 	WiFi.begin(networkCredentials.ssid, networkCredentials.password);
-	int res = WiFi.waitForConnectResult();
-	if (res == WL_CONNECTED) {
-		connectionStatus = "CONNECTION_SUCCESSFUL";
-	} else {
-		connectionStatus = "CONNECTION_FAILED";
-	}
+
+	return WiFi.waitForConnectResult();
+}
+
+void ConfigServer::handleDone() {
+	webServer.send(200, "text/plain", "Done. You can leave now.");
+	done = true;
 }

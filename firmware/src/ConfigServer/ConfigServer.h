@@ -18,17 +18,18 @@ static const int PORT_WEB = 80;
 class ConfigServer {
 public:
 	ConfigServer(const char *ssid, const char *password);
-	~ConfigServer();
 	void run();
-	void connectToNetwork();
+	int connectToNetwork();
 	static String connectionStatus;
 	static bool shouldConnect;
+	static bool done;
 	static ESP8266WebServer webServer;
 	static int numAvailableNetworks;
 	static credentials_t networkCredentials;
 private:
 	DNSServer dnsServer;
 	int scanNetworks();
+	void handleDone();
 };
 
 #endif

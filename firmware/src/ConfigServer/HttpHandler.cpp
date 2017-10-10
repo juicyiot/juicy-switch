@@ -51,7 +51,7 @@ void HttpHandler::handleConfigSave() {
 			"<html><head></head><body>"
 			"<h2>Connection Successful</h2>"
 			"<p>IP: " + String() + toString(WiFi.localIP()) + "</p>"
-			"<p>You can close this window and exit the config network now.</p>"
+			"<p>Your all set up now. <a href='/done'>Click here</a> to finish the configuration.</p>"
 			"</body></html>"
 		);
 		ConfigServer::webServer.client().stop();
@@ -89,14 +89,6 @@ void HttpHandler::handleConfigSave() {
 	}
 }
 
-void HttpHandler::handleConfigSuccess() {
-	ConfigServer::webServer.send(200, "text/plain", "juicy config: config success");
-}
-
-void HttpHandler::handleConfigFailure() {
-	ConfigServer::webServer.send(200, "text/plain", "juicy config: config failure");
-}
-
 void HttpHandler::handleNotFound() {
 	if(captivePortal()) {
 		return;
@@ -110,6 +102,7 @@ void HttpHandler::initializeConnection() {
 	ConfigServer::webServer.sendHeader("Expires", "-1");
 	ConfigServer::webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
 	ConfigServer::webServer.send(200, "text/html", "");
+	ConfigServer::webServer.sendContent("<meta name='viewport' content='width=device-width, initial-scale=1'>");
 }
 
 bool HttpHandler::captivePortal() {

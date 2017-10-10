@@ -10,7 +10,6 @@ public:
 	void handleRoot();
 	void handleConfig();
 	void handleConfigSave();
-	void handleConfigSuccess();
 	void handleConfigFailure();
 	void handleNotFound();
 private:
