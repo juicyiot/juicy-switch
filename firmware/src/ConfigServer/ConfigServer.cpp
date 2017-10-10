@@ -4,7 +4,7 @@ ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
 int ConfigServer::numAvailableNetworks = 0;
 credentials_t ConfigServer::networkCredentials;
 bool ConfigServer::shouldConnect = false;
-bool ConfigServer::connectionSuccessful = false;
+String ConfigServer::connectionStatus = "NONE";
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
@@ -51,13 +51,12 @@ void ConfigServer::run() {
 }
 
 void ConfigServer::connectToNetwork() {
-	Serial.println("Connecting to network.");
 	WiFi.disconnect();
 	WiFi.begin(networkCredentials.ssid, networkCredentials.password);
 	int res = WiFi.waitForConnectResult();
 	if (res == WL_CONNECTED) {
-		Serial.println(WiFi.localIP());
-		connectionSuccessful = true;
+		connectionStatus = "CONNECTION_SUCCESSFUL";
+	} else {
+		connectionStatus = "CONNECTION_FAILED";
 	}
-	Serial.printf("Result: %d\n", res);
 }

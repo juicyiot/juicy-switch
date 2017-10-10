@@ -15,6 +15,8 @@ void HttpHandler::handleRoot() {
 }
 
 void HttpHandler::handleConfig() {
+	ConfigServer::connectionStatus = "NONE";
+
 	initializeConnection();
 	ConfigServer::webServer.sendContent(
 		"<html><head></head><body>"
@@ -44,10 +46,33 @@ void HttpHandler::handleConfig() {
 
 void HttpHandler::handleConfigSave() {
 	initializeConnection();
+	if (ConfigServer::connectionStatus == "CONNECTION_SUCCESSFUL") {
+		ConfigServer::webServer.sendContent(
+			"<html><head></head><body>"
+			"<h2>Connection Successful</h2>"
+			"<p>IP: " + String() + toString(WiFi.localIP()) + "</p>"
+			"<p>You can close this window and exit the config network now.</p>"
+			"</body></html>"
+		);
+		ConfigServer::webServer.client().stop();
+		return;
+	}
+
+	if (ConfigServer::connectionStatus == "CONNECTION_FAILED") {
+		ConfigServer::webServer.sendContent(
+			"<html><head></head><body>"
+			"<h2>Connection Failed. <a href='/config'>Try again!</a></h2>"
+			"</body></html>"
+		);
+		ConfigServer::webServer.client().stop();
+		return;
+	}
+
 	ConfigServer::webServer.sendContent(
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
-		"<p>Please wait until you are redirected.</p>"
+		"<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},5000);</script>"
+		"</body></html>"
 	);
 	ConfigServer::webServer.client().stop();
 
