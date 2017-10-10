@@ -13,9 +13,9 @@ typedef struct {
 
 class CredentialsStorage {
 public:
-	void save(void *data_src);
-	void load(void *data_dst);
-	void clearMemory();
+	static void save(void *data_src, size_t size);
+	static void load(void *data_dst, size_t size);
+	static void clearMemory(size_t size);
 };
 
 #endif

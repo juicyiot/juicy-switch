@@ -52,6 +52,7 @@ void HttpHandler::handleConfigSave() {
 		String password = ConfigServer::webServer.arg("password");
 		strncpy(ConfigServer::networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
 		strncpy(ConfigServer::networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
+		CredentialsStorage::save(&ConfigServer::networkCredentials, sizeof(ConfigServer::networkCredentials));
 	}
 
 	ConfigServer::webServer.send(200, "text/plain", "juicy config: config save");
