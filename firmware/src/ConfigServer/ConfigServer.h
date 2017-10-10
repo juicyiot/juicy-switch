@@ -8,6 +8,12 @@
 
 #include "HttpHandler.h"
 
+static const IPAddress AP_IP(192, 168, 4, 1);
+static const IPAddress AP_NM(255, 255, 255, 0);
+
+static const byte PORT_DNS = 53;
+static const int PORT_WEB = 80;
+
 class ConfigServer {
 public:
 	ConfigServer(const char *ssid, const char *password);
