@@ -20,6 +20,8 @@ public:
 	ConfigServer(const char *ssid, const char *password);
 	~ConfigServer();
 	void run();
+	void connectToNetwork();
+	static bool shouldConnect;
 	static ESP8266WebServer webServer;
 	static int numAvailableNetworks;
 	static credentials_t networkCredentials;

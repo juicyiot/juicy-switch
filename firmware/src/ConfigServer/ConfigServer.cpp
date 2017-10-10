@@ -3,6 +3,7 @@
 ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
 int ConfigServer::numAvailableNetworks = 0;
 credentials_t ConfigServer::networkCredentials;
+bool ConfigServer::shouldConnect = false;
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
@@ -29,7 +30,6 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	webServer.on("/configsuccess", std::bind(&HttpHandler::handleConfigSuccess, handler));
 	webServer.on("/generate_204", std::bind(&HttpHandler::handleRoot, handler)); // Explicit Android captive portal
 	webServer.onNotFound(std::bind(&HttpHandler::handleNotFound, handler)); // Other captive portals
-
 	webServer.begin();
 }
 
@@ -41,7 +41,15 @@ ConfigServer::~ConfigServer() {
 
 void ConfigServer::run() {
 	while (true) {
+		if (shouldConnect) {
+			shouldConnect = false;
+			connectToNetwork();
+		}
 		dnsServer.processNextRequest();
 		webServer.handleClient();
 	}
+}
+
+void ConfigServer::connectToNetwork() {
+	Serial.println("Connect to network.");
 }
