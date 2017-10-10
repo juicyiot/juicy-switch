@@ -43,8 +43,17 @@ void HttpHandler::handleConfig() {
 }
 
 void HttpHandler::handleConfigSave() {
-	Serial.println(ConfigServer::webServer.arg("ssid"));
-	Serial.println(ConfigServer::webServer.arg("password"));
+	bool twoArgs = ConfigServer::webServer.args() == 2;
+	bool ssidIsThere = twoArgs ? (ConfigServer::webServer.argName(0) == "ssid") : false;
+	bool passwordIsThere = twoArgs ? (ConfigServer::webServer.argName(1) == "password") : false;
+
+	if (ssidIsThere && passwordIsThere) {
+		String ssid = ConfigServer::webServer.arg("ssid");
+		String password = ConfigServer::webServer.arg("password");
+		strncpy(ConfigServer::networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
+		strncpy(ConfigServer::networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
+	}
+
 	ConfigServer::webServer.send(200, "text/plain", "juicy config: config save");
 }
 

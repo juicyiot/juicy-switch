@@ -2,6 +2,7 @@
 
 ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
 int ConfigServer::numAvailableNetworks = 0;
+credentials_t ConfigServer::networkCredentials;
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
@@ -22,7 +23,6 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 
 	// Setup web server.
 	HttpHandler handler;
-
 	webServer.on("/", std::bind(&HttpHandler::handleRoot, handler));
 	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));
 	webServer.on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));

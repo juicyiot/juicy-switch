@@ -4,11 +4,11 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 
-const size_t CREDENTIALS_SIZE = 64;
+const size_t CREDENTIAL_SIZE = 64;
 
 typedef struct {
-	char ssid[CREDENTIALS_SIZE];
-	char password[CREDENTIALS_SIZE];
+	char ssid[CREDENTIAL_SIZE];
+	char password[CREDENTIAL_SIZE];
 } credentials_t;
 
 class CredentialsStorage {

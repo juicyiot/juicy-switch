@@ -7,6 +7,7 @@
 #include <ESP8266mDNS.h>
 
 #include "HttpHandler.h"
+#include "CredentialsStorage.h"
 
 static const IPAddress AP_IP(192, 168, 4, 1);
 static const IPAddress AP_NM(255, 255, 255, 0);
@@ -21,6 +22,7 @@ public:
 	void run();
 	static ESP8266WebServer webServer;
 	static int numAvailableNetworks;
+	static credentials_t networkCredentials;
 private:
 	DNSServer dnsServer;
 	int scanNetworks();
