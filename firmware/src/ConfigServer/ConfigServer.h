@@ -21,6 +21,7 @@ public:
 	~ConfigServer();
 	void run();
 	void connectToNetwork();
+	static bool connectionSuccessful;
 	static bool shouldConnect;
 	static ESP8266WebServer webServer;
 	static int numAvailableNetworks;

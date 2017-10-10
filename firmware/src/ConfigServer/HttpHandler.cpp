@@ -43,10 +43,17 @@ void HttpHandler::handleConfig() {
 }
 
 void HttpHandler::handleConfigSave() {
+	initializeConnection();
+	ConfigServer::webServer.sendContent(
+		"<html><head></head><body>"
+		"<h2>Connecting...</h2>"
+		"<p>Please wait until you are redirected.</p>"
+	);
+	ConfigServer::webServer.client().stop();
+
 	bool twoArgs = ConfigServer::webServer.args() == 2;
 	bool ssidIsThere = twoArgs ? (ConfigServer::webServer.argName(0) == "ssid") : false;
 	bool passwordIsThere = twoArgs ? (ConfigServer::webServer.argName(1) == "password") : false;
-
 	if (ssidIsThere && passwordIsThere) {
 		String ssid = ConfigServer::webServer.arg("ssid");
 		String password = ConfigServer::webServer.arg("password");
@@ -55,12 +62,14 @@ void HttpHandler::handleConfigSave() {
 		CredentialsStorage::save(&ConfigServer::networkCredentials, sizeof(ConfigServer::networkCredentials));
 		ConfigServer::shouldConnect = true;
 	}
-
-	ConfigServer::webServer.send(200, "text/plain", "juicy config: config save");
 }
 
 void HttpHandler::handleConfigSuccess() {
 	ConfigServer::webServer.send(200, "text/plain", "juicy config: config success");
+}
+
+void HttpHandler::handleConfigFailure() {
+	ConfigServer::webServer.send(200, "text/plain", "juicy config: config failure");
 }
 
 void HttpHandler::handleNotFound() {

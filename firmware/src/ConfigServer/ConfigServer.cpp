@@ -4,15 +4,16 @@ ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
 int ConfigServer::numAvailableNetworks = 0;
 credentials_t ConfigServer::networkCredentials;
 bool ConfigServer::shouldConnect = false;
+bool ConfigServer::connectionSuccessful = false;
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
-	WiFi.mode(WIFI_STA);
+	// WiFi.mode(WIFI_STA);
 	WiFi.disconnect();
 	numAvailableNetworks = WiFi.scanNetworks();
 
 	// Setup access point with provided credentials.
-	WiFi.mode(WIFI_AP);
+	// WiFi.mode(WIFI_AP);
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
 	WiFi.softAP(ssid, password);
 	delay(500);
@@ -36,7 +37,6 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 ConfigServer::~ConfigServer() {
 	webServer.stop();
 	dnsServer.stop();
-	WiFi.softAPdisconnect();
 }
 
 void ConfigServer::run() {
@@ -51,5 +51,13 @@ void ConfigServer::run() {
 }
 
 void ConfigServer::connectToNetwork() {
-	Serial.println("Connect to network.");
+	Serial.println("Connecting to network.");
+	WiFi.disconnect();
+	WiFi.begin(networkCredentials.ssid, networkCredentials.password);
+	int res = WiFi.waitForConnectResult();
+	if (res == WL_CONNECTED) {
+		Serial.println(WiFi.localIP());
+		connectionSuccessful = true;
+	}
+	Serial.printf("Result: %d\n", res);
 }

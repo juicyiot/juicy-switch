@@ -7,8 +7,8 @@
 const size_t CREDENTIAL_SIZE = 64;
 
 typedef struct {
-	char ssid[CREDENTIAL_SIZE];
-	char password[CREDENTIAL_SIZE];
+	char ssid[CREDENTIAL_SIZE] = "";
+	char password[CREDENTIAL_SIZE] = "";
 } credentials_t;
 
 class CredentialsStorage {
