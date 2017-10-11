@@ -7,7 +7,7 @@ bool ConfigServer::shouldConnect = false;
 bool ConfigServer::done = false;
 String ConfigServer::connectionStatus = "NONE";
 
-ConfigServer::ConfigServer(const char *ssid, const char *password) {
+ConfigServer::ConfigServer(const char *configNetSSID, const char *configNetPassword) {
 	// Scan available networks.
 	WiFi.disconnect();
 	numAvailableNetworks = WiFi.scanNetworks();
@@ -18,7 +18,7 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 
 	// Setup access point with provided credentials.
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
-	WiFi.softAP(ssid, password);
+	WiFi.softAP(configNetSSID, configNetPassword);
 	delay(500);
 
 	// Setup DNS server to redirect all domains to the access point IP.
