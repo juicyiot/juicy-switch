@@ -9,7 +9,7 @@ void HttpHandler::handleRoot() {
 		"<html><head></head><body>"
 		"<h1>Welcome to your Juicy Socket</h1>"
 		"<p>Click <a href='/config'>here</a> to set up the socket's WiFi connection.</p>"
-		"<p>Click <a href='/done'>here</a> to close the config network.</p>"
+		"<p>Click <a href='/close'>here</a> to close the config network.</p>"
 		"</body></html>"
 	);
 	ConfigServer::webServer.client().stop();
@@ -52,7 +52,7 @@ void HttpHandler::handleConfigSave() {
 			"<html><head></head><body>"
 			"<h2>Connection Successful</h2>"
 			"<p>IP: " + String() + toString(WiFi.localIP()) + "</p>"
-			"<p>Your all set up now. <a href='/done'>Click here</a> to finish the configuration.</p>"
+			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
 			"</body></html>"
 		);
 		ConfigServer::webServer.client().stop();

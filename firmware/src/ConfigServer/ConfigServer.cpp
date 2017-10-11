@@ -7,8 +7,13 @@ bool ConfigServer::shouldConnect = false;
 bool ConfigServer::done = false;
 String ConfigServer::connectionStatus = "NONE";
 
-ConfigServer::ConfigServer(const char *configNetSSID, const char *configNetPassword) {
-	// Scan available networks.
+ConfigServer::ConfigServer(const char *ssid, const char *password) {
+	configNetSSID = ssid;
+	configNetPassword = password;
+}
+
+void ConfigServer::setup() {
+	// Scan networks
 	WiFi.disconnect();
 	numAvailableNetworks = WiFi.scanNetworks();
 
@@ -16,45 +21,39 @@ ConfigServer::ConfigServer(const char *configNetSSID, const char *configNetPassw
 	CredentialsStorage::load(&networkCredentials, sizeof(networkCredentials));
 	connectToNetwork();
 
-	// Setup access point with provided credentials.
+	// Setup access point with provided credentials
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
 	WiFi.softAP(configNetSSID, configNetPassword);
 	delay(500);
 
-	// Setup DNS server to redirect all domains to the access point IP.
+	// Setup DNS server to redirect all domains to the access point IP
 	dnsServer = DNSServer();
 	dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
 	dnsServer.start(PORT_DNS, "*", AP_IP);
 
-	// Setup web server.
+	// Setup web server
 	HttpHandler handler;
 	webServer.on("/", std::bind(&HttpHandler::handleRoot, handler));
 	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));
 	webServer.on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));
-	webServer.on("/done", std::bind(&ConfigServer::handleDone, this));
+	webServer.on("/close", std::bind(&ConfigServer::handleClose, this));
 	webServer.on("/generate_204", std::bind(&HttpHandler::handleRoot, handler)); // Explicit Android captive portal
 	webServer.onNotFound(std::bind(&HttpHandler::handleNotFound, handler)); // Other captive portals
 	webServer.begin();
 }
 
 void ConfigServer::run() {
-	while (!done) {
-		if (shouldConnect) {
-			shouldConnect = false;
-			int res = connectToNetwork();
-			if (res == WL_CONNECTED) {
-				connectionStatus = "CONNECTION_SUCCESSFUL";
-			} else {
-				connectionStatus = "CONNECTION_FAILED";
-			}
+	if (shouldConnect) {
+		shouldConnect = false;
+		int res = connectToNetwork();
+		if (res == WL_CONNECTED) {
+			connectionStatus = "CONNECTION_SUCCESSFUL";
+		} else {
+			connectionStatus = "CONNECTION_FAILED";
 		}
-		dnsServer.processNextRequest();
-		webServer.handleClient();
 	}
-	webServer.stop();
-	dnsServer.stop();
-	WiFi.mode(WIFI_STA);
-	WiFi.softAPdisconnect(true);
+	dnsServer.processNextRequest();
+	webServer.handleClient();
 }
 
 int ConfigServer::connectToNetwork() {
@@ -64,7 +63,12 @@ int ConfigServer::connectToNetwork() {
 	return WiFi.waitForConnectResult();
 }
 
-void ConfigServer::handleDone() {
+void ConfigServer::handleClose() {
 	webServer.send(200, "text/plain", "Done. You can leave now.");
 	done = true;
+
+	webServer.stop();
+	dnsServer.stop();
+	WiFi.softAPdisconnect(true);
+	WiFi.mode(WIFI_STA);
 }

@@ -18,6 +18,7 @@ static const int PORT_WEB = 80;
 class ConfigServer {
 public:
 	ConfigServer(const char *ssid, const char *password);
+	void setup();
 	void run();
 	int connectToNetwork();
 	static String connectionStatus;
@@ -29,7 +30,9 @@ public:
 private:
 	DNSServer dnsServer;
 	int scanNetworks();
-	void handleDone();
+	void handleClose();
+	const char *configNetSSID;
+	const char *configNetPassword;
 };
 
 #endif
