@@ -7,9 +7,10 @@ bool ConfigServer::shouldConnect = false;
 bool ConfigServer::done = false;
 ConnectionStatus ConfigServer::connectionStatus = none;
 
-ConfigServer::ConfigServer(const char *ssid, const char *password) {
+ConfigServer::ConfigServer(const char *ssid, const char *password, const char *hostname) {
 	configNetSSID = ssid;
 	configNetPassword = password;
+	mdnsHostname = hostname;
 }
 
 void ConfigServer::setup() {
@@ -45,22 +46,24 @@ void ConfigServer::setup() {
 void ConfigServer::run() {
 	if (shouldConnect) {
 		shouldConnect = false;
-		int res = connectToNetwork();
-		if (res == WL_CONNECTED) {
-			connectionStatus = successful;
-		} else {
-			connectionStatus = failed;
-		}
+		connectToNetwork();
 	}
 	dnsServer.processNextRequest();
 	webServer.handleClient();
 }
 
-int ConfigServer::connectToNetwork() {
+void ConfigServer::connectToNetwork() {
 	WiFi.disconnect();
 	WiFi.begin(networkCredentials.ssid, networkCredentials.password);
 
-	return WiFi.waitForConnectResult();
+	int res = WiFi.waitForConnectResult();
+	if (res == WL_CONNECTED) {
+		connectionStatus = successful;
+		MDNS.begin(mdnsHostname);
+		MDNS.addService("http", "tcp", 80);
+	} else {
+		connectionStatus = failed;
+	}
 }
 
 void ConfigServer::handleClose() {

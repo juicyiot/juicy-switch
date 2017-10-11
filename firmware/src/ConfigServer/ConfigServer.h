@@ -23,10 +23,10 @@ enum ConnectionStatus {
 
 class ConfigServer {
 public:
-	ConfigServer(const char *ssid, const char *password);
+	ConfigServer(const char *ssid, const char *password, const char* hostname);
 	void setup();
 	void run();
-	int connectToNetwork();
+	void connectToNetwork();
 	static ConnectionStatus connectionStatus;
 	static bool shouldConnect;
 	static bool done;
@@ -39,6 +39,7 @@ private:
 	void handleClose();
 	const char *configNetSSID;
 	const char *configNetPassword;
+	const char *mdnsHostname;
 };
 
 #endif
