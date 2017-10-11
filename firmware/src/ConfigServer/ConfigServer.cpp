@@ -9,12 +9,14 @@ String ConfigServer::connectionStatus = "NONE";
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	// Scan available networks.
-	// WiFi.mode(WIFI_STA);
 	WiFi.disconnect();
 	numAvailableNetworks = WiFi.scanNetworks();
 
+	// Try to connect using persisted credentials
+	CredentialsStorage::load(&networkCredentials, sizeof(networkCredentials));
+	connectToNetwork();
+
 	// Setup access point with provided credentials.
-	// WiFi.mode(WIFI_AP);
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
 	WiFi.softAP(ssid, password);
 	delay(500);

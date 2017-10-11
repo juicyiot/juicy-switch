@@ -3,7 +3,7 @@
 
 void setup() {
     Serial.begin(115200);
-	delay(3000);
+	delay(5000);
 
 	ConfigServer config("juicy_switch", "password");
 	config.run();

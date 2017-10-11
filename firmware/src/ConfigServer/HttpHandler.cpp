@@ -9,6 +9,7 @@ void HttpHandler::handleRoot() {
 		"<html><head></head><body>"
 		"<h1>Welcome to your Juicy Socket</h1>"
 		"<p>Click <a href='/config'>here</a> to set up the socket's WiFi connection.</p>"
+		"<p>Click <a href='/done'>here</a> to close the config network.</p>"
 		"</body></html>"
 	);
 	ConfigServer::webServer.client().stop();
