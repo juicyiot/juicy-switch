@@ -5,7 +5,7 @@ int ConfigServer::numAvailableNetworks = 0;
 credentials_t ConfigServer::networkCredentials;
 bool ConfigServer::shouldConnect = false;
 bool ConfigServer::done = false;
-String ConfigServer::connectionStatus = "NONE";
+ConnectionStatus ConfigServer::connectionStatus = none;
 
 ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	configNetSSID = ssid;
@@ -47,9 +47,9 @@ void ConfigServer::run() {
 		shouldConnect = false;
 		int res = connectToNetwork();
 		if (res == WL_CONNECTED) {
-			connectionStatus = "CONNECTION_SUCCESSFUL";
+			connectionStatus = successful;
 		} else {
-			connectionStatus = "CONNECTION_FAILED";
+			connectionStatus = failed;
 		}
 	}
 	dnsServer.processNextRequest();

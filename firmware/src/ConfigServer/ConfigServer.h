@@ -15,13 +15,19 @@ static const IPAddress AP_NM(255, 255, 255, 0);
 static const byte PORT_DNS = 53;
 static const int PORT_WEB = 80;
 
+enum ConnectionStatus {
+	successful,
+	failed,
+	none
+};
+
 class ConfigServer {
 public:
 	ConfigServer(const char *ssid, const char *password);
 	void setup();
 	void run();
 	int connectToNetwork();
-	static String connectionStatus;
+	static ConnectionStatus connectionStatus;
 	static bool shouldConnect;
 	static bool done;
 	static ESP8266WebServer webServer;

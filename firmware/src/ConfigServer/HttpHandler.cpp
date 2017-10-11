@@ -16,7 +16,7 @@ void HttpHandler::handleRoot() {
 }
 
 void HttpHandler::handleConfig() {
-	ConfigServer::connectionStatus = "NONE";
+	ConfigServer::connectionStatus = none;
 
 	initializeConnection();
 	ConfigServer::webServer.sendContent(
@@ -47,7 +47,7 @@ void HttpHandler::handleConfig() {
 
 void HttpHandler::handleConfigSave() {
 	initializeConnection();
-	if (ConfigServer::connectionStatus == "CONNECTION_SUCCESSFUL") {
+	if (ConfigServer::connectionStatus == successful) {
 		ConfigServer::webServer.sendContent(
 			"<html><head></head><body>"
 			"<h2>Connection Successful</h2>"
@@ -59,7 +59,7 @@ void HttpHandler::handleConfigSave() {
 		return;
 	}
 
-	if (ConfigServer::connectionStatus == "CONNECTION_FAILED") {
+	if (ConfigServer::connectionStatus == failed) {
 		ConfigServer::webServer.sendContent(
 			"<html><head></head><body>"
 			"<h2>Connection Failed. <a href='/config'>Try again!</a></h2>"
