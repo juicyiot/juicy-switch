@@ -27,19 +27,20 @@ public:
 	void setup();
 	void run();
 	void connectToNetwork();
+	bool isDone();
 	static ConnectionStatus connectionStatus;
 	static bool shouldConnect;
-	static bool done;
 	static ESP8266WebServer webServer;
 	static int numAvailableNetworks;
 	static credentials_t networkCredentials;
 private:
 	DNSServer dnsServer;
-	int scanNetworks();
-	void handleClose();
+	bool done;
 	const char *configNetSSID;
 	const char *configNetPassword;
 	const char *mdnsHostname;
+	int scanNetworks();
+	void handleClose();
 };
 
 #endif
