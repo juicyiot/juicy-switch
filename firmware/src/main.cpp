@@ -18,12 +18,12 @@ void setup() {
 }
 
 void loop() {
-	if (!config.isDone()) {
+	if (!config.done) {
 		config.run();
 	} else if (!once) {
 		once = true;
 		api.setup();
 	} else {
-		api.serve();
+		api.serve();	
 	}
 }

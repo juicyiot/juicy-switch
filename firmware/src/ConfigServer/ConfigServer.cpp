@@ -4,13 +4,13 @@ ESP8266WebServer ConfigServer::webServer = ESP8266WebServer(PORT_WEB);
 int ConfigServer::numAvailableNetworks = 0;
 credentials_t ConfigServer::networkCredentials;
 bool ConfigServer::shouldConnect = false;
+bool ConfigServer::done = false;
 ConnectionStatus ConfigServer::connectionStatus = none;
 
 ConfigServer::ConfigServer(const char *ssid, const char *password, const char *hostname) {
 	configNetSSID = ssid;
 	configNetPassword = password;
 	mdnsHostname = hostname;
-	done = false;
 }
 
 void ConfigServer::setup() {
@@ -74,8 +74,4 @@ void ConfigServer::handleClose() {
 	dnsServer.stop();
 	WiFi.softAPdisconnect(true);
 	WiFi.mode(WIFI_STA);
-}
-
-bool ConfigServer::isDone() {
-	return done;
 }
