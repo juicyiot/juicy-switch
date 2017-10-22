@@ -13,7 +13,7 @@ We designed the PCB to the best of our knowledge to be safe (see [Safety](#safet
 - Easy to setup and to use (your mom can use it :wink:)
 - Simple yet powerful :rocket:
 
-The Juicy Switch can be self assembled and is affordable, see [Bill of Materials](#bill-of-materials). The setup is a friction less and quick process. After the device is powered up, it will create a WIFI hotspot called `juicy_switch`. Connect with your Smartphone/Notebook and proceed with the one time [Setup](#setup). Eventough the switch is very simple to use, many *smart* use cases can be built on top, see [Use Case Ideas](#use-case-ideas) to get inspired.
+The Juicy Switch can be self assembled and is affordable, see [Bill of Materials](#bill-of-materials). The setup is a friction less and quick process. After the device is powered up, it will create a WIFI hotspot called `juicy_switch`. Connect with your Smartphone/Notebook and proceed with the one time [Setup](#setup). Eventhough the switch is very simple to use, many *smart* use cases can be built on top, see [Use Case Ideas](#use-case-ideas) to get inspired.
 
 ## Hardware
 
