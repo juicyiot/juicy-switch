@@ -1,6 +1,6 @@
 #include "CredentialsStorage.h"
 
-void CredentialsStorage::save(void *data_src, size_t size) {
+void CredentialsStorage::save(const void *data_src, const size_t size) {
 	EEPROM.begin(size);
 	for (size_t i = 0; i < size; i++) {
 		char data = ((char *)data_src)[i];

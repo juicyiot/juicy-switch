@@ -13,7 +13,7 @@ typedef struct {
 
 class CredentialsStorage {
 public:
-	static void save(void *data_src, size_t size);
+	static void save(const void *data_src, const size_t size);
 	static void load(void *data_dst, size_t size);
 	static void clearMemory(size_t size);
 };
