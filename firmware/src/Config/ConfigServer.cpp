@@ -18,11 +18,8 @@ void ConfigServer::setup() {
 	WiFi.disconnect();
 	numAvailableNetworks = WiFi.scanNetworks();
 
-	// Try to connect using persisted credentials
-	CredentialsStorage::load(&networkCredentials, sizeof(networkCredentials));
-	connectToNetwork();
-
 	// Setup access point with provided credentials
+	WiFi.mode(WIFI_AP);
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
 	WiFi.softAP(configNetSSID, configNetPassword);
 	delay(500);
@@ -38,8 +35,7 @@ void ConfigServer::setup() {
 	webServer.on("/config", std::bind(&HttpHandler::handleConfig, handler));
 	webServer.on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));
 	webServer.on("/close", std::bind(&ConfigServer::handleClose, this));
-	webServer.on("/generate_204", std::bind(&HttpHandler::handleRoot, handler)); // Explicit Android captive portal
-	webServer.onNotFound(std::bind(&HttpHandler::handleNotFound, handler)); // Other captive portals
+	webServer.onNotFound(std::bind(&HttpHandler::handleNotFound, handler));
 	webServer.begin();
 }
 
@@ -52,7 +48,7 @@ void ConfigServer::run() {
 	webServer.handleClient();
 }
 
-void ConfigServer::connectToNetwork() {
+bool ConfigServer::connectToNetwork() {
 	WiFi.disconnect();
 	WiFi.begin(networkCredentials.ssid, networkCredentials.password);
 
@@ -61,9 +57,11 @@ void ConfigServer::connectToNetwork() {
 		connectionStatus = successful;
 		MDNS.begin(mdnsHostname);
 		MDNS.addService("http", "tcp", 80);
-	} else {
-		connectionStatus = failed;
+		return true;
 	}
+
+	connectionStatus = failed;
+	return false;
 }
 
 void ConfigServer::handleClose() {

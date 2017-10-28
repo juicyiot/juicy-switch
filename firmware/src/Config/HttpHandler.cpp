@@ -1,9 +1,9 @@
 #include "HttpHandler.h"
 
 void HttpHandler::handleRoot() {
-	if (captivePortal()) {
-		return;
-	}
+	// if (captivePortal()) {
+	// 	return;
+	// }
 	initializeConnection();
 	ConfigServer::webServer.sendContent(
 		"<html><head></head><body>"
@@ -91,9 +91,10 @@ void HttpHandler::handleConfigSave() {
 }
 
 void HttpHandler::handleNotFound() {
-	if(captivePortal()) {
-		return;
-	}
+	// if(captivePortal()) {
+	// 	return;
+	// }
+	Serial.println(ConfigServer::webServer.hostHeader());
 	ConfigServer::webServer.send(200, "text/plain", "juicy config: not found");
 }
 

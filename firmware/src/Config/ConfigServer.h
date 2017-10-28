@@ -7,7 +7,7 @@
 #include <ESP8266mDNS.h>
 
 #include "HttpHandler.h"
-#include "CredentialsStorage.h"
+#include "../WiFi/CredentialsStorage.h"
 
 static const IPAddress AP_IP(192, 168, 4, 1);
 static const IPAddress AP_NM(255, 255, 255, 0);
@@ -26,7 +26,7 @@ public:
 	ConfigServer(const char *ssid, const char *password, const char* hostname);
 	void setup();
 	void run();
-	void connectToNetwork();
+	bool connectToNetwork();
 	static ConnectionStatus connectionStatus;
 	static bool shouldConnect;
 	static bool done;
