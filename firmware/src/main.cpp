@@ -5,17 +5,18 @@
 
 API api;
 
-bool apiIsSetup = false;
-
 void setup() {
     Serial.begin(115200);
 	delay(5000);
 
 	Connection connection;
-	connection.connect();
-	api.setup();
+	if (connection.connect()) {
+		api.setup();
+	}
 }
 
 void loop() {
-	api.serve();
+	if (api.isSetup) {
+		api.serve();
+	}
 }

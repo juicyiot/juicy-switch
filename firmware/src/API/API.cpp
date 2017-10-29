@@ -1,6 +1,8 @@
 #include "API.h"
 
-API::API() {}
+API::API() {
+	isSetup = false;
+}
 
 API::~API() {
 	server.stop();
@@ -15,6 +17,8 @@ void API::setup() {
 	server.on("/status", std::bind(&API::status, this));
 	server.onNotFound(std::bind(&API::notFound, this));
 	server.begin();
+	isSetup = true;
+	Serial.println("API is setup.");
 }
 
 void API::serve() {
