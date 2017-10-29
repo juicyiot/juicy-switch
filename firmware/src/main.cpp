@@ -1,24 +1,21 @@
 #include <Arduino.h>
 #include "WiFi/Connection.h"
 #include "Config/ConfigServer.h"
-#include <ESP8266WebServer.h>
+#include "API/API.h"
 
-ConfigServer config("juicy_switch", "password", "juicy");
+API api;
+
+bool apiIsSetup = false;
 
 void setup() {
     Serial.begin(115200);
 	delay(5000);
 
 	Connection connection;
-	if (connection.connect()) {
-		Serial.println("Connected");
-		connection.persistCredentials();
-	} else {
-		Serial.println("Not connected");
-		config.setup();
-	}
+	connection.connect();
+	api.setup();
 }
 
 void loop() {
-	config.run();
+	api.serve();
 }

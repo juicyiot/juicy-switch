@@ -1,19 +1,19 @@
 #include "API.h"
 
-API::API() {
-	server = ESP8266WebServer(80);
-}
+API::API() {}
 
 API::~API() {
 	server.stop();
 }
 
 void API::setup() {
+	server = ESP8266WebServer(80);
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
 	server.on("/on", std::bind(&API::on, this));
 	server.on("/off", std::bind(&API::off, this));
 	server.on("/status", std::bind(&API::status, this));
+	server.onNotFound(std::bind(&API::notFound, this));
 	server.begin();
 }
 
@@ -38,4 +38,8 @@ void API::status() {
 	} else {
 		server.send(200, "text/plain", "{'status:' 'off'}");
 	}
+}
+
+void API::notFound() {
+	server.send(200, "text/plain", "{'error:' 'not found'}");
 }

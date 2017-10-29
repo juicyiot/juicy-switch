@@ -15,6 +15,7 @@ private:
 	void on();
 	void off();
 	void status();
+	void notFound();
 };
 
 #endif
