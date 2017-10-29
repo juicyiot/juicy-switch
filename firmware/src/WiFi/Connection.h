@@ -8,6 +8,7 @@ public:
 	Connection();
 	Connection(const char *ssid, const char *password);
 	bool connect() const;
+	void disconnect() const;
 	bool isConnected() const;
 	void persistCredentials() const;
 private:
