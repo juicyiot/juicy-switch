@@ -2,6 +2,8 @@
 
 #include <ESP8266WiFi.h>
 
+credentials_t WiFiConnection::credentials;
+
 WiFiConnection::WiFiConnection() {
 	CredentialsStorage::load(&credentials, sizeof(credentials));
 
@@ -51,6 +53,10 @@ bool WiFiConnection::isConnected() const {
 
 String WiFiConnection::getIP() const {
 	return WiFi.localIP().toString();
+}
+
+String WiFiConnection::getSSID() const {
+	return String() + credentials.ssid;
 }
 
 void WiFiConnection::persistCredentials() const {

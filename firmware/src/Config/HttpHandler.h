@@ -12,6 +12,7 @@ public:
 	void handleConfig();
 	void handleConfigSave();
 	void handleConfigFailure();
+	void handleClose();
 	void handleNotFound();
 private:
 	std::unique_ptr<ESP8266WebServer> &webServer;

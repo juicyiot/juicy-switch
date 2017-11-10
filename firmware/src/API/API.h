@@ -8,10 +8,13 @@ class API {
 public:
 	API();
 	~API();
+
 	void setup();
 	void serve();
+
 private:
-	ESP8266WebServer server;
+	std::unique_ptr<ESP8266WebServer> server;
+
 	void on();
 	void off();
 	void status();

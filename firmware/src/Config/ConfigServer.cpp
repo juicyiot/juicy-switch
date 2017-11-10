@@ -2,9 +2,15 @@
 
 #include "../WiFi/WiFiConnection.h"
 
+const IPAddress AP_IP(192, 168, 4, 1);
+const IPAddress AP_NM(255, 255, 255, 0);
+
+const int PORT_WEB = 80;
+const int PORT_DNS = 53;
+
 ConfigServer::ConfigServer(const char *ssid, const char *password, const char *hostname) {
 	configNetSSID = ssid;
-	configNetPassword = password;
+	configNetPass = password;
 	mdnsHostname = hostname;
 
 	status = none;
@@ -13,28 +19,31 @@ ConfigServer::ConfigServer(const char *ssid, const char *password, const char *h
 
 void ConfigServer::setup() {
 	WiFi.mode(WIFI_AP_STA);
+
 	webServer.reset(new ESP8266WebServer(PORT_WEB));
-	WiFi.softAP(configNetSSID, configNetPassword);
+
+	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
+	WiFi.softAP(configNetSSID, configNetPass);
+
 	delay(500);
 
-	// Setup web server
 	HttpHandler handler(webServer, *this);
 	webServer->on("/", std::bind(&HttpHandler::handleRoot, handler));
 	webServer->on("/config", std::bind(&HttpHandler::handleConfig, handler));
 	webServer->on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));
-	webServer->on("/close", std::bind(&ConfigServer::handleClose, this));
+	webServer->on("/close", std::bind(&HttpHandler::handleClose, handler));
 	webServer->onNotFound(std::bind(&HttpHandler::handleNotFound, handler));
 	webServer->begin();
 }
 
-void ConfigServer::runBlocking() {
+void ConfigServer::run() {
 	while (status != done) {
 		if (shouldConnect) {
 			shouldConnect = false;
-			delay(500);
-			Serial.println(String() + networkCredentials.ssid + " " + networkCredentials.password);
-			connectToNetwork();
+
+			status = connectToNetwork() ? successful : failed;
 		}
+
 		webServer->handleClient();
 	}
 
@@ -45,16 +54,8 @@ bool ConfigServer::connectToNetwork() {
 	WiFiConnection connection(networkCredentials.ssid, networkCredentials.password);
 
 	if (connection.connect(false)) {
-		delay(500);
-		status = successful;
 		return true;
 	}
 
-	status = failed;
 	return false;
-}
-
-void ConfigServer::handleClose() {
-	webServer->send(200, "text/plain", "Done. You can leave now.");
-	status = done;
 }

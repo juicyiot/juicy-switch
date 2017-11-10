@@ -11,8 +11,11 @@ public:
 	void disconnect(bool shouldClearCredentials);
 	bool isConnected() const;
 	String getIP() const;
+	String getSSID() const;
+
+	static credentials_t credentials;
+
 private:
-	credentials_t credentials;
 	void persistCredentials() const;
 	void clearCredentials();
 };

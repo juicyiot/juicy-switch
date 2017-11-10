@@ -75,14 +75,14 @@ void HttpHandler::handleConfigSave() {
 	webServer->sendContent(
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
-		"<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},5000);</script>"
+		"<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},2000);</script>"
 		"</body></html>"
 	);
 	webServer->client().stop();
 
 	bool twoArgs = webServer->args() == 2;
-	bool ssidIsThere = twoArgs ? (webServer->argName(0) == "ssid") : false;
-	bool passwordIsThere = twoArgs ? (webServer->argName(1) == "password") : false;
+	bool ssidIsThere = twoArgs ? (webServer->argName(0) == "ssid" && webServer->argName(0).length() > 0) : false;
+	bool passwordIsThere = twoArgs ? (webServer->argName(1) == "password" && webServer->argName(1).length() > 0) : false;
 	if (ssidIsThere && passwordIsThere) {
 		String ssid = webServer->arg("ssid");
 		String password = webServer->arg("password");
@@ -92,11 +92,16 @@ void HttpHandler::handleConfigSave() {
 	}
 }
 
+void HttpHandler::handleClose() {
+	webServer->send(200, "text/plain", "Done. You can leave now.");
+
+	config.status = done;
+}
+
 void HttpHandler::handleNotFound() {
 	if(captivePortal()) {
 		return;
 	}
-	Serial.println(webServer->hostHeader());
 	webServer->send(200, "text/plain", "juicy config: not found");
 }
 
@@ -110,7 +115,6 @@ void HttpHandler::initializeConnection() {
 }
 
 bool HttpHandler::captivePortal() {
-	Serial.println("Captive");
 	bool isRequestForIPAddress = isIPAddress(webServer->hostHeader());
 	bool isRequestForConfigPage = webServer->hostHeader() == "juicy.local";
 	if (!isRequestForIPAddress && !isRequestForConfigPage) {

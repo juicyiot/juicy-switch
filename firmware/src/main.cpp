@@ -3,16 +3,28 @@
 #include "Config/ConfigServer.h"
 #include "API/API.h"
 
-WiFiConnection connection("wifi_123", "wlankabel123!");
-ConfigServer config("juicy_switch", "password", "juicy_switch");
+const char *CONFIG_NET_SSID = "juicy_switch";
+const char *CONFIG_NET_PASS = "password";
+const char *CONFIG_NET_HOST = "juicy";
+
+ConfigServer config(CONFIG_NET_SSID, CONFIG_NET_PASS, CONFIG_NET_HOST);
+WiFiConnection connection;
 API api;
 
 void setup() {
     Serial.begin(115200);
-	delay(5000);
+	delay(3000);
 
-	config.setup();
-	config.runBlocking();
+	// Try to connect using persisted credentials.
+	// If the connection failes, setup a configuration AP
+	// that blocks until new credentials have been provided
+	// and we are connected to the local network.
+	if (!connection.connect(false)) {
+		config.setup();
+		config.run();
+	}
+
+	Serial.print("Connected to " + connection.getSSID() + ". Local IP: " + connection.getIP());
 
 	api.setup();
 }
