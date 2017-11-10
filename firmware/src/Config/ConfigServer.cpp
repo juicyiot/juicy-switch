@@ -59,7 +59,7 @@ void ConfigServer::run() {
 bool ConfigServer::connectToNetwork() {
 	WiFiConnection connection(networkCredentials.ssid, networkCredentials.password);
 
-	if (connection.connect(false)) {
+	if (connection.connect(true)) {
 		return true;
 	}
 
