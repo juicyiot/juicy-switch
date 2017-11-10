@@ -8,7 +8,6 @@ class API {
 public:
 	API();
 	~API();
-	bool isSetup;
 	void setup();
 	void serve();
 private:
