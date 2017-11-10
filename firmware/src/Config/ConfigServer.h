@@ -3,6 +3,7 @@
 
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
+#include <DNSServer.h>
 
 #include "HttpHandler.h"
 #include "../WiFi/CredentialsStorage.h"
@@ -27,7 +28,8 @@ public:
 
 private:
 	std::unique_ptr<ESP8266WebServer> webServer;
-	
+	std::unique_ptr<DNSServer> dnsServer;
+
 	const char *configNetSSID;
 	const char *configNetPass;
 	const char *mdnsHostname;

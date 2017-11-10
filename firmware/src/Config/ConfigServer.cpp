@@ -21,11 +21,15 @@ void ConfigServer::setup() {
 	WiFi.mode(WIFI_AP_STA);
 
 	webServer.reset(new ESP8266WebServer(PORT_WEB));
+	dnsServer.reset(new DNSServer());
 
 	WiFi.softAPConfig(AP_IP, AP_IP, AP_NM);
 	WiFi.softAP(configNetSSID, configNetPass);
 
 	delay(500);
+
+	dnsServer->setErrorReplyCode(DNSReplyCode::NoError);
+	dnsServer->start(PORT_DNS, "*", WiFi.softAPIP());
 
 	HttpHandler handler(webServer, *this);
 	webServer->on("/", std::bind(&HttpHandler::handleRoot, handler));
@@ -44,10 +48,12 @@ void ConfigServer::run() {
 			status = connectToNetwork() ? successful : failed;
 		}
 
+		dnsServer->processNextRequest();
 		webServer->handleClient();
 	}
 
 	webServer.reset();
+	dnsServer.reset();
 }
 
 bool ConfigServer::connectToNetwork() {
