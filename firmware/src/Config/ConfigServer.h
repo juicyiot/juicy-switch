@@ -15,30 +15,33 @@ static const IPAddress AP_NM(255, 255, 255, 0);
 static const byte PORT_DNS = 53;
 static const int PORT_WEB = 80;
 
-enum ConnectionStatus {
+enum ConfigStatus {
 	successful,
 	failed,
+	done,
 	none
 };
 
 class ConfigServer {
 public:
 	ConfigServer(const char *ssid, const char *password, const char* hostname);
+
+	ConfigStatus status;
+	bool shouldConnect;
+	credentials_t networkCredentials;
+
 	void setup();
-	void run();
-	bool connectToNetwork();
-	ESP8266WebServer webServer;
-	bool isSetup;
-	static ConnectionStatus connectionStatus;
-	static bool shouldConnect;
-	static credentials_t networkCredentials;
+	void runBlocking();
+
 private:
-	DNSServer dnsServer;
-	int scanNetworks();
-	void handleClose();
+	std::unique_ptr<ESP8266WebServer> webServer;
 	const char *configNetSSID;
 	const char *configNetPassword;
 	const char *mdnsHostname;
+
+	int scanNetworks();
+	bool connectToNetwork();
+	void handleClose();
 };
 
 #endif

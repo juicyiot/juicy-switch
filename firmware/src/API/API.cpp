@@ -2,7 +2,7 @@
 
 #include "../WiFi/WiFiConnection.h"
 
-API::API() : server(ESP8266WebServer(80)) {
+API::API() {
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
 }
@@ -12,6 +12,10 @@ API::~API() {
 }
 
 void API::setup() {
+	Serial.println("Setting up API.");
+	
+	WiFi.mode(WIFI_STA);
+	server = ESP8266WebServer(80);
 	server.on("/on", std::bind(&API::on, this));
 	server.on("/off", std::bind(&API::off, this));
 	server.on("/status", std::bind(&API::status, this));
@@ -38,7 +42,7 @@ void API::off() {
 
 void API::status() {
 	int status = digitalRead(LED_BUILTIN);
-	
+
 	if (status == LOW) {
 		server.send(200, "text/plain", "{'status:' 'on'}");
 	} else {

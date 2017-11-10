@@ -3,18 +3,19 @@
 
 #include <ESP8266WebServer.h>
 
-#include "ConfigServer.h"
+class ConfigServer;
 
 class HttpHandler {
 public:
-	HttpHandler(ESP8266WebServer &webServer);
+	HttpHandler(std::unique_ptr<ESP8266WebServer> &webServer, ConfigServer &config);
 	void handleRoot();
 	void handleConfig();
 	void handleConfigSave();
 	void handleConfigFailure();
 	void handleNotFound();
 private:
-	ESP8266WebServer &webServer;
+	std::unique_ptr<ESP8266WebServer> &webServer;
+	ConfigServer &config;
 	void initializeConnection();
 	bool captivePortal();
 	bool isIPAddress(String str);

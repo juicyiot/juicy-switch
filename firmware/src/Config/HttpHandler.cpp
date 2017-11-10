@@ -1,31 +1,33 @@
 #include "HttpHandler.h"
 
-HttpHandler::HttpHandler(ESP8266WebServer &webServer) : webServer(webServer) {};
+#include "ConfigServer.h"
+
+HttpHandler::HttpHandler(std::unique_ptr<ESP8266WebServer> &webServer, ConfigServer &config) : webServer(webServer), config(config) {};
 
 void HttpHandler::handleRoot() {
-	// if (captivePortal()) {
-	// 	return;
-	// }
+	if (captivePortal()) {
+		return;
+	}
 	initializeConnection();
-	webServer.sendContent(
+	webServer->sendContent(
 		"<html><head></head><body>"
 		"<h1>Welcome to your Juicy Socket</h1>"
 		"<p>Click <a href='/config'>here</a> to set up the socket's WiFi connection.</p>"
 		"<p>Click <a href='/close'>here</a> to close the config network.</p>"
 		"</body></html>"
 	);
-	webServer.client().stop();
+	webServer->client().stop();
 }
 
 void HttpHandler::handleConfig() {
-	ConfigServer::connectionStatus = none;
+	config.status = none;
 
 	initializeConnection();
-	webServer.sendContent(
+	webServer->sendContent(
 		"<html><head></head><body>"
 		"<h2>Select your WiFi network</h2>"
 	);
-	webServer.sendContent(
+	webServer->sendContent(
 		"</table><br>"
 		"<form method='POST' action='configsave'>"
 		"SSID:"
@@ -43,78 +45,78 @@ void HttpHandler::handleConfig() {
 	// } else {
 	// 	webServer.sendContent(String() + "<tr><td>-<td><td>No WiFi network found</td></tr>");
 	// }
-	webServer.sendContent(String() + "</body></html>");
-	webServer.client().stop();
+	webServer->sendContent(String() + "</body></html>");
+	webServer->client().stop();
 }
 
 void HttpHandler::handleConfigSave() {
 	initializeConnection();
-	if (ConfigServer::connectionStatus == successful) {
-		webServer.sendContent(
+	if (config.status == successful) {
+		webServer->sendContent(
 			"<html><head></head><body>"
 			"<h2>Connection Successful</h2>"
 			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
 			"</body></html>"
 		);
-		webServer.client().stop();
+		webServer->client().stop();
 		return;
 	}
 
-	if (ConfigServer::connectionStatus == failed) {
-		webServer.sendContent(
+	if (config.status == failed) {
+		webServer->sendContent(
 			"<html><head></head><body>"
 			"<h2>Connection Failed. <a href='/config'>Try again!</a></h2>"
 			"</body></html>"
 		);
-		webServer.client().stop();
+		webServer->client().stop();
 		return;
 	}
 
-	webServer.sendContent(
+	webServer->sendContent(
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
 		"<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},5000);</script>"
 		"</body></html>"
 	);
-	webServer.client().stop();
+	webServer->client().stop();
 
-	bool twoArgs = webServer.args() == 2;
-	bool ssidIsThere = twoArgs ? (webServer.argName(0) == "ssid") : false;
-	bool passwordIsThere = twoArgs ? (webServer.argName(1) == "password") : false;
+	bool twoArgs = webServer->args() == 2;
+	bool ssidIsThere = twoArgs ? (webServer->argName(0) == "ssid") : false;
+	bool passwordIsThere = twoArgs ? (webServer->argName(1) == "password") : false;
 	if (ssidIsThere && passwordIsThere) {
-		String ssid = webServer.arg("ssid");
-		String password = webServer.arg("password");
-		strncpy(ConfigServer::networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
-		strncpy(ConfigServer::networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
-		ConfigServer::shouldConnect = true;
+		String ssid = webServer->arg("ssid");
+		String password = webServer->arg("password");
+		strncpy(config.networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
+		strncpy(config.networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
+		config.shouldConnect = true;
 	}
 }
 
 void HttpHandler::handleNotFound() {
-	// if(captivePortal()) {
-	// 	return;
-	// }
-	Serial.println(webServer.hostHeader());
-	webServer.send(200, "text/plain", "juicy config: not found");
+	if(captivePortal()) {
+		return;
+	}
+	Serial.println(webServer->hostHeader());
+	webServer->send(200, "text/plain", "juicy config: not found");
 }
 
 void HttpHandler::initializeConnection() {
-	webServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	webServer.sendHeader("Pragma", "no-cache");
-	webServer.sendHeader("Expires", "-1");
-	webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
-	webServer.send(200, "text/html", "");
-	webServer.sendContent("<meta name='viewport' content='width=device-width, initial-scale=1'>");
+	webServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	webServer->sendHeader("Pragma", "no-cache");
+	webServer->sendHeader("Expires", "-1");
+	webServer->setContentLength(CONTENT_LENGTH_UNKNOWN);
+	webServer->send(200, "text/html", "");
+	webServer->sendContent("<meta name='viewport' content='width=device-width, initial-scale=1'>");
 }
 
 bool HttpHandler::captivePortal() {
 	Serial.println("Captive");
-	bool isRequestForIPAddress = isIPAddress(webServer.hostHeader());
-	bool isRequestForConfigPage = webServer.hostHeader() == "juicy.local";
+	bool isRequestForIPAddress = isIPAddress(webServer->hostHeader());
+	bool isRequestForConfigPage = webServer->hostHeader() == "juicy.local";
 	if (!isRequestForIPAddress && !isRequestForConfigPage) {
-		webServer.sendHeader("Location", String("http://") + toString(webServer.client().localIP()), true);
-		webServer.send(302, "text/plain", "");
-		webServer.client().stop();
+		webServer->sendHeader("Location", String("http://") + toString(webServer->client().localIP()), true);
+		webServer->send(302, "text/plain", "");
+		webServer->client().stop();
 		return true;
 	}
 
