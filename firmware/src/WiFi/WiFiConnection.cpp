@@ -29,6 +29,16 @@ bool WiFiConnection::connect(bool shouldPersistCredentials) const {
 	return isConnected();
 }
 
+void WiFiConnection::disconnect(bool shouldClearCredentials) {
+	if (isConnected()) {
+		WiFi.disconnect();
+	}
+
+	if (shouldClearCredentials) {
+		clearCredentials();
+	}
+}
+
 bool WiFiConnection::isConnected() const {
 	wl_status_t status = WiFi.status();
 
@@ -39,14 +49,8 @@ bool WiFiConnection::isConnected() const {
 	return true;
 }
 
-void WiFiConnection::disconnect(bool shouldClearCredentials) {
-	if (isConnected()) {
-		WiFi.disconnect();
-	}
-
-	if (shouldClearCredentials) {
-		clearCredentials();
-	}
+String WiFiConnection::getIP() const {
+	return WiFi.localIP().toString();
 }
 
 void WiFiConnection::persistCredentials() const {

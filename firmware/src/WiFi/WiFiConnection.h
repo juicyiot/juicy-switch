@@ -10,6 +10,7 @@ public:
 	bool connect(bool shouldPersistCredentials) const;
 	void disconnect(bool shouldClearCredentials);
 	bool isConnected() const;
+	String getIP() const;
 private:
 	credentials_t credentials;
 	void persistCredentials() const;
