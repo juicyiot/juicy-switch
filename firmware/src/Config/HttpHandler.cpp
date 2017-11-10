@@ -1,37 +1,31 @@
 #include "HttpHandler.h"
 
+HttpHandler::HttpHandler(ESP8266WebServer &webServer) : webServer(webServer) {};
+
 void HttpHandler::handleRoot() {
 	// if (captivePortal()) {
 	// 	return;
 	// }
 	initializeConnection();
-	ConfigServer::webServer.sendContent(
+	webServer.sendContent(
 		"<html><head></head><body>"
 		"<h1>Welcome to your Juicy Socket</h1>"
 		"<p>Click <a href='/config'>here</a> to set up the socket's WiFi connection.</p>"
 		"<p>Click <a href='/close'>here</a> to close the config network.</p>"
 		"</body></html>"
 	);
-	ConfigServer::webServer.client().stop();
+	webServer.client().stop();
 }
 
 void HttpHandler::handleConfig() {
 	ConfigServer::connectionStatus = none;
 
 	initializeConnection();
-	ConfigServer::webServer.sendContent(
+	webServer.sendContent(
 		"<html><head></head><body>"
 		"<h2>Select your WiFi network</h2>"
-		"<table><tr><th>#</th><th align='left'>SSID</th></tr>"
 	);
-	if (ConfigServer::numAvailableNetworks > 0) {
-		for (int i = 0; i < ConfigServer::numAvailableNetworks; i++) {
-			ConfigServer::webServer.sendContent(String() + "<tr><td>" + i + "</td><td>" + WiFi.SSID(i) + "</td></td>");
-		}
-	} else {
-		ConfigServer::webServer.sendContent(String() + "<tr><td>-<td><td>No WiFi network found</td></tr>");
-	}
-	ConfigServer::webServer.sendContent(
+	webServer.sendContent(
 		"</table><br>"
 		"<form method='POST' action='configsave'>"
 		"SSID:"
@@ -40,52 +34,58 @@ void HttpHandler::handleConfig() {
 		"<input type='password' placehoder='password' name='password'/><br>"
 		"<input type='submit' value='Connect'/>"
 		"</form>"
-		"</body></html>"
+		// "<table><tr><th>#</th><th align='left'>SSID</th></tr>"
 	);
-	ConfigServer::webServer.client().stop();
+	// if (webServer.numAvailableNetworks > 0) {
+	// 	for (int i = 0; i < webServer.numAvailableNetworks; i++) {
+	// 		webServer.sendContent(String() + "<tr><td>" + i + "</td><td>" + WiFi.SSID(i) + "</td></td>");
+	// 	}
+	// } else {
+	// 	webServer.sendContent(String() + "<tr><td>-<td><td>No WiFi network found</td></tr>");
+	// }
+	webServer.sendContent(String() + "</body></html>");
+	webServer.client().stop();
 }
 
 void HttpHandler::handleConfigSave() {
 	initializeConnection();
 	if (ConfigServer::connectionStatus == successful) {
-		ConfigServer::webServer.sendContent(
+		webServer.sendContent(
 			"<html><head></head><body>"
 			"<h2>Connection Successful</h2>"
-			"<p>IP: " + String() + toString(WiFi.localIP()) + "</p>"
 			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
 			"</body></html>"
 		);
-		ConfigServer::webServer.client().stop();
+		webServer.client().stop();
 		return;
 	}
 
 	if (ConfigServer::connectionStatus == failed) {
-		ConfigServer::webServer.sendContent(
+		webServer.sendContent(
 			"<html><head></head><body>"
 			"<h2>Connection Failed. <a href='/config'>Try again!</a></h2>"
 			"</body></html>"
 		);
-		ConfigServer::webServer.client().stop();
+		webServer.client().stop();
 		return;
 	}
 
-	ConfigServer::webServer.sendContent(
+	webServer.sendContent(
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
 		"<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},5000);</script>"
 		"</body></html>"
 	);
-	ConfigServer::webServer.client().stop();
+	webServer.client().stop();
 
-	bool twoArgs = ConfigServer::webServer.args() == 2;
-	bool ssidIsThere = twoArgs ? (ConfigServer::webServer.argName(0) == "ssid") : false;
-	bool passwordIsThere = twoArgs ? (ConfigServer::webServer.argName(1) == "password") : false;
+	bool twoArgs = webServer.args() == 2;
+	bool ssidIsThere = twoArgs ? (webServer.argName(0) == "ssid") : false;
+	bool passwordIsThere = twoArgs ? (webServer.argName(1) == "password") : false;
 	if (ssidIsThere && passwordIsThere) {
-		String ssid = ConfigServer::webServer.arg("ssid");
-		String password = ConfigServer::webServer.arg("password");
+		String ssid = webServer.arg("ssid");
+		String password = webServer.arg("password");
 		strncpy(ConfigServer::networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
 		strncpy(ConfigServer::networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
-		CredentialsStorage::save(&ConfigServer::networkCredentials, sizeof(ConfigServer::networkCredentials));
 		ConfigServer::shouldConnect = true;
 	}
 }
@@ -94,26 +94,27 @@ void HttpHandler::handleNotFound() {
 	// if(captivePortal()) {
 	// 	return;
 	// }
-	Serial.println(ConfigServer::webServer.hostHeader());
-	ConfigServer::webServer.send(200, "text/plain", "juicy config: not found");
+	Serial.println(webServer.hostHeader());
+	webServer.send(200, "text/plain", "juicy config: not found");
 }
 
 void HttpHandler::initializeConnection() {
-	ConfigServer::webServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	ConfigServer::webServer.sendHeader("Pragma", "no-cache");
-	ConfigServer::webServer.sendHeader("Expires", "-1");
-	ConfigServer::webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
-	ConfigServer::webServer.send(200, "text/html", "");
-	ConfigServer::webServer.sendContent("<meta name='viewport' content='width=device-width, initial-scale=1'>");
+	webServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	webServer.sendHeader("Pragma", "no-cache");
+	webServer.sendHeader("Expires", "-1");
+	webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+	webServer.send(200, "text/html", "");
+	webServer.sendContent("<meta name='viewport' content='width=device-width, initial-scale=1'>");
 }
 
 bool HttpHandler::captivePortal() {
-	bool isRequestForIPAddress = isIPAddress(ConfigServer::webServer.hostHeader());
-	bool isRequestForConfigPage = ConfigServer::webServer.hostHeader() == "juicy.local";
+	Serial.println("Captive");
+	bool isRequestForIPAddress = isIPAddress(webServer.hostHeader());
+	bool isRequestForConfigPage = webServer.hostHeader() == "juicy.local";
 	if (!isRequestForIPAddress && !isRequestForConfigPage) {
-		ConfigServer::webServer.sendHeader("Location", String("http://") + toString(ConfigServer::webServer.client().localIP()), true);
-		ConfigServer::webServer.send(302, "text/plain", "");
-		ConfigServer::webServer.client().stop();
+		webServer.sendHeader("Location", String("http://") + toString(webServer.client().localIP()), true);
+		webServer.send(302, "text/plain", "");
+		webServer.client().stop();
 		return true;
 	}
 

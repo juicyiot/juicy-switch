@@ -1,5 +1,7 @@
 #include "API.h"
 
+#include "../WiFi/Connection.h"
+
 API::API() {
 	isSetup = false;
 }
@@ -18,10 +20,13 @@ void API::setup() {
 	server.onNotFound(std::bind(&API::notFound, this));
 	server.begin();
 	isSetup = true;
-	Serial.println("API is setup.");
 }
 
 void API::serve() {
+	if (!isSetup) {
+		Serial.println("Setting up API");
+		setup();
+	}
 	server.handleClient();
 }
 

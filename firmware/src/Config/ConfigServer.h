@@ -27,11 +27,10 @@ public:
 	void setup();
 	void run();
 	bool connectToNetwork();
+	ESP8266WebServer webServer;
+	bool isSetup;
 	static ConnectionStatus connectionStatus;
 	static bool shouldConnect;
-	static bool done;
-	static ESP8266WebServer webServer;
-	static int numAvailableNetworks;
 	static credentials_t networkCredentials;
 private:
 	DNSServer dnsServer;
