@@ -23,6 +23,10 @@ void API::setup() {
 	server->on("/status", std::bind(&API::status, this));
 	server->onNotFound(std::bind(&API::notFound, this));
 	server->begin();
+
+	if (MDNS.begin("juicy_switch")) {
+		MDNS.addService("http", "tcp", PORT_WEB);
+	}
 }
 
 void API::serve() {
