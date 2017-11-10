@@ -1,6 +1,6 @@
 #include "ConfigServer.h"
 
-#include "../WiFi/Connection.h"
+#include "../WiFi/WiFiConnection.h"
 
 credentials_t ConfigServer::networkCredentials;
 bool ConfigServer::shouldConnect = false;
@@ -54,11 +54,10 @@ void ConfigServer::run() {
 }
 
 bool ConfigServer::connectToNetwork() {
-	Connection connection(networkCredentials.ssid, networkCredentials.password);
+	WiFiConnection connection(networkCredentials.ssid, networkCredentials.password);
 
-	if (connection.connect()) {
-		connection.persistCredentials();
-		connection.disconnect();
+	if (connection.connect(true)) {
+		connection.disconnect(false);
 		connectionStatus = successful;
 		// MDNS.begin(mdnsHostname);
 		// MDNS.addService("http", "tcp", 80);

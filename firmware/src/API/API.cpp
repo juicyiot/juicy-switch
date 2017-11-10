@@ -1,6 +1,6 @@
 #include "API.h"
 
-#include "../WiFi/Connection.h"
+#include "../WiFi/WiFiConnection.h"
 
 API::API() {
 	isSetup = false;

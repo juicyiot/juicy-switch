@@ -1,22 +1,17 @@
 #include <Arduino.h>
-#include "WiFi/Connection.h"
-#include "Config/ConfigServer.h"
-#include "API/API.h"
+#include "WiFi/WiFiConnection.h"
 
-API api;
+WiFiConnection connection;
 
 void setup() {
     Serial.begin(115200);
 	delay(5000);
 
-	Connection connection;
-	if (connection.connect()) {
-		api.setup();
+	if (connection.connect(false)) {
+		Serial.println("Connected.");
 	}
 }
 
 void loop() {
-	if (api.isSetup) {
-		api.serve();
-	}
+
 }
