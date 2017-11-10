@@ -6,10 +6,6 @@ credentials_t WiFiConnection::credentials;
 
 WiFiConnection::WiFiConnection() {
 	CredentialsStorage::load(&credentials, sizeof(credentials));
-
-	Serial.print("Loaded credentials: ");
-	Serial.print(String() + credentials.ssid + " ");
-	Serial.print(String() + credentials.password + "\n");
 }
 
 WiFiConnection::WiFiConnection(const char *ssid, const char *password) {
