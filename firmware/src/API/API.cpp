@@ -4,7 +4,7 @@
 
 const int PORT_WEB = 80;
 
-API::API() {
+API::API(const char *hostname) : hostname(hostname) {
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
 }
@@ -24,7 +24,7 @@ void API::setup() {
 	server->onNotFound(std::bind(&API::notFound, this));
 	server->begin();
 
-	if (MDNS.begin("juicy_switch")) {
+	if (MDNS.begin(hostname)) {
 		MDNS.addService("http", "tcp", PORT_WEB);
 	}
 }

@@ -5,11 +5,11 @@
 
 const char *CONFIG_NET_SSID = "juicy_switch";
 const char *CONFIG_NET_PASS = "password";
-const char *CONFIG_NET_HOST = "juicy";
+const char *API_HOST = "juicy_switch";
 
-ConfigServer config(CONFIG_NET_SSID, CONFIG_NET_PASS, CONFIG_NET_HOST);
+ConfigServer config(CONFIG_NET_SSID, CONFIG_NET_PASS);
 WiFiConnection connection;
-API api;
+API api(API_HOST);
 
 void setup() {
     Serial.begin(115200);

@@ -8,10 +8,9 @@ const IPAddress AP_NM(255, 255, 255, 0);
 const int PORT_WEB = 80;
 const int PORT_DNS = 53;
 
-ConfigServer::ConfigServer(const char *ssid, const char *password, const char *hostname) {
+ConfigServer::ConfigServer(const char *ssid, const char *password) {
 	configNetSSID = ssid;
 	configNetPass = password;
-	mdnsHostname = hostname;
 
 	status = none;
 	shouldConnect = false;

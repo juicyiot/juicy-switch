@@ -17,7 +17,7 @@ enum ConfigStatus {
 
 class ConfigServer {
 public:
-	ConfigServer(const char *ssid, const char *password, const char* hostname);
+	ConfigServer(const char *ssid, const char *password);
 
 	ConfigStatus status;
 	bool shouldConnect;

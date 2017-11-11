@@ -7,7 +7,7 @@
 
 class API {
 public:
-	API();
+	API(const char *hostname);
 	~API();
 
 	void setup();
@@ -15,6 +15,7 @@ public:
 
 private:
 	std::unique_ptr<ESP8266WebServer> server;
+	const char *hostname;
 
 	void on();
 	void off();
