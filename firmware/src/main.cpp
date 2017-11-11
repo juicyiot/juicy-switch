@@ -19,7 +19,7 @@ void setup() {
 	// If the connection failes, setup a configuration AP
 	// that blocks until new credentials have been provided
 	// and we are connected to the local network.
-	if (connection.connect(false)) {
+	if (!connection.connect(false)) {
 		config.setup();
 		config.run();
 	}
