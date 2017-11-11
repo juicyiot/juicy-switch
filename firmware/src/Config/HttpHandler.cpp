@@ -22,13 +22,14 @@ void HttpHandler::handleRoot() {
 void HttpHandler::handleConfig() {
 	config.status = none;
 
+	// Todo: Scan and display available WiFi networks.
+
 	initializeConnection();
 	webServer->sendContent(
 		"<html><head></head><body>"
 		"<h2>Select your WiFi network</h2>"
 	);
 	webServer->sendContent(
-		"</table><br>"
 		"<form method='POST' action='configsave'>"
 		"SSID:"
 		"<input type='text' placehoder='ssid' name='ssid'/><br>"
@@ -36,15 +37,8 @@ void HttpHandler::handleConfig() {
 		"<input type='password' placehoder='password' name='password'/><br>"
 		"<input type='submit' value='Connect'/>"
 		"</form>"
-		// "<table><tr><th>#</th><th align='left'>SSID</th></tr>"
 	);
-	// if (webServer.numAvailableNetworks > 0) {
-	// 	for (int i = 0; i < webServer.numAvailableNetworks; i++) {
-	// 		webServer.sendContent(String() + "<tr><td>" + i + "</td><td>" + WiFi.SSID(i) + "</td></td>");
-	// 	}
-	// } else {
-	// 	webServer.sendContent(String() + "<tr><td>-<td><td>No WiFi network found</td></tr>");
-	// }
+
 	webServer->sendContent(String() + "</body></html>");
 	webServer->client().stop();
 }

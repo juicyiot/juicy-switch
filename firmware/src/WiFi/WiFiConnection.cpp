@@ -57,10 +57,6 @@ String WiFiConnection::getSSID() const {
 
 void WiFiConnection::persistCredentials() const {
 	CredentialsStorage::save(&credentials, sizeof(credentials));
-
-	Serial.print("Persisting credentials: ");
-	Serial.print(String() + credentials.ssid + " ");
-	Serial.print(String() + credentials.password + "\n");
 }
 
 void WiFiConnection::clearCredentials() {
