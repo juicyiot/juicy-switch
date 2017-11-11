@@ -28,8 +28,6 @@ void HttpHandler::handleConfig() {
 	webServer->sendContent(
 		"<html><head></head><body>"
 		"<h2>Select your WiFi network</h2>"
-	);
-	webServer->sendContent(
 		"<form method='POST' action='configsave'>"
 		"SSID:"
 		"<input type='text' placehoder='ssid' name='ssid'/><br>"
@@ -37,9 +35,8 @@ void HttpHandler::handleConfig() {
 		"<input type='password' placehoder='password' name='password'/><br>"
 		"<input type='submit' value='Connect'/>"
 		"</form>"
+		"</body></html>"
 	);
-
-	webServer->sendContent(String() + "</body></html>");
 	webServer->client().stop();
 }
 
