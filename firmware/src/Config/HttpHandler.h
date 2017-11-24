@@ -9,9 +9,9 @@ class HttpHandler {
 public:
 	HttpHandler(std::unique_ptr<ESP8266WebServer> &webServer, ConfigServer &config);
 	void handleRoot();
-	void handleConfig();
-	void handleConfigSave();
-	void handleConfigFailure();
+	void handleSetup();
+	void handleSave();
+	void handleStatus();
 	void handleClose();
 	void handleNotFound();
 private:

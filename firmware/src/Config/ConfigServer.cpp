@@ -32,8 +32,9 @@ void ConfigServer::setup() {
 
 	HttpHandler handler(webServer, *this);
 	webServer->on("/", std::bind(&HttpHandler::handleRoot, handler));
-	webServer->on("/config", std::bind(&HttpHandler::handleConfig, handler));
-	webServer->on("/configsave", std::bind(&HttpHandler::handleConfigSave, handler));
+	webServer->on("/setup", std::bind(&HttpHandler::handleSetup, handler));
+	webServer->on("/save", std::bind(&HttpHandler::handleSave, handler));
+	webServer->on("/status", std::bind(&HttpHandler::handleStatus, handler));
 	webServer->on("/close", std::bind(&HttpHandler::handleClose, handler));
 	webServer->onNotFound(std::bind(&HttpHandler::handleNotFound, handler));
 	webServer->begin();
@@ -41,14 +42,19 @@ void ConfigServer::setup() {
 
 void ConfigServer::run() {
 	while (status != done) {
+		dnsServer->processNextRequest();
+		webServer->handleClient();
+
 		if (shouldConnect) {
 			shouldConnect = false;
 
 			status = connectToNetwork() ? successful : failed;
+			if (status == successful) {
+				Serial.println("Connection successful.");
+			} else {
+				Serial.println("Connection failed.");
+			}
 		}
-
-		dnsServer->processNextRequest();
-		webServer->handleClient();
 	}
 
 	webServer.reset();
@@ -58,7 +64,8 @@ void ConfigServer::run() {
 bool ConfigServer::connectToNetwork() {
 	WiFiConnection connection(networkCredentials.ssid, networkCredentials.password);
 
-	if (connection.connect(true)) {
+	if (connection.connect()) {
+		connection.persistCredentials();
 		return true;
 	}
 

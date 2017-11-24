@@ -13,18 +13,17 @@ WiFiConnection::WiFiConnection(const char *ssid, const char *password) {
 	strncpy(credentials.password, password, CREDENTIAL_SIZE);
 }
 
-bool WiFiConnection::connect(bool shouldPersistCredentials) const {
+bool WiFiConnection::connect() const {
 	// Don't automatically persist credentials. We'll do it ourselves.
 	WiFi.persistent(false);
 
-	WiFi.begin(credentials.ssid, credentials.password);
-	uint8_t status = WiFi.waitForConnectResult();
-
-	if (shouldPersistCredentials) {
-		persistCredentials();
+	if (WiFi.status() == WL_CONNECTED) {
+		return true;
 	}
 
-	return isConnected();
+	WiFi.begin(credentials.ssid, credentials.password);
+
+	return WiFi.waitForConnectResult() == WL_CONNECTED;
 }
 
 void WiFiConnection::disconnect(bool shouldClearCredentials) {

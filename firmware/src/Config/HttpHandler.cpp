@@ -8,27 +8,24 @@ void HttpHandler::handleRoot() {
 	if (captivePortal()) {
 		return;
 	}
-	initializeConnection();
-	webServer->sendContent(
+	webServer->send(200, "text/html",
 		"<html><head></head><body>"
 		"<h1>Welcome to your Juicy Socket</h1>"
-		"<p>Click <a href='/config'>here</a> to set up the socket's WiFi connection.</p>"
+		"<p>Click <a href='/setup'>here</a> to set up the socket's WiFi connection.</p>"
 		"<p>Click <a href='/close'>here</a> to close the config network.</p>"
 		"</body></html>"
 	);
-	webServer->client().stop();
 }
 
-void HttpHandler::handleConfig() {
+void HttpHandler::handleSetup() {
 	config.status = none;
 
 	// Todo: Scan and display available WiFi networks.
 
-	initializeConnection();
-	webServer->sendContent(
+	webServer->send(200, "text/html",
 		"<html><head></head><body>"
 		"<h2>Select your WiFi network</h2>"
-		"<form method='POST' action='configsave'>"
+		"<form method='POST' action='save'>"
 		"SSID:"
 		"<input type='text' placehoder='ssid' name='ssid'/><br>"
 		"Password:"
@@ -37,39 +34,16 @@ void HttpHandler::handleConfig() {
 		"</form>"
 		"</body></html>"
 	);
-	webServer->client().stop();
 }
 
-void HttpHandler::handleConfigSave() {
-	initializeConnection();
-	if (config.status == successful) {
-		webServer->sendContent(
-			"<html><head></head><body>"
-			"<h2>Connection Successful</h2>"
-			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
-			"</body></html>"
-		);
-		webServer->client().stop();
-		return;
-	}
-
-	if (config.status == failed) {
-		webServer->sendContent(
-			"<html><head></head><body>"
-			"<h2>Connection Failed. <a href='/config'>Try again!</a></h2>"
-			"</body></html>"
-		);
-		webServer->client().stop();
-		return;
-	}
-
-	webServer->sendContent(
+void HttpHandler::handleSave() {
+	webServer->send(200, "text/html",
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
-		"<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},2000);</script>"
+		"<p>Click here <a href='/status'>here</a> after a couple of seconds to check the connection status.</p>"
+		// "<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},3000);</script>"
 		"</body></html>"
 	);
-	webServer->client().stop();
 
 	bool twoArgs = webServer->args() == 2;
 	bool ssidIsThere = twoArgs ? (webServer->argName(0) == "ssid" && webServer->argName(0).length() > 0) : false;
@@ -77,14 +51,36 @@ void HttpHandler::handleConfigSave() {
 	if (ssidIsThere && passwordIsThere) {
 		String ssid = webServer->arg("ssid");
 		String password = webServer->arg("password");
+		Serial.println("Try to connect using: " + ssid + password);
 		strncpy(config.networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
 		strncpy(config.networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
 		config.shouldConnect = true;
 	}
 }
 
+void HttpHandler::handleStatus() {
+	if (config.status == successful) {
+		webServer->send(200, "text/html",
+			"<html><head></head><body>"
+			"<h2>Connection Successful</h2>"
+			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
+			"</body></html>"
+		);
+	} else if (config.status == failed) {
+		webServer->send(200, "text/html",
+			"<html><head></head><body>"
+			"<h2>Connection Failed. <a href='/setup'>Try again!</a></h2>"
+			"</body></html>"
+		);
+	}
+}
+
 void HttpHandler::handleClose() {
-	webServer->send(200, "text/plain", "Done. You can leave now.");
+	webServer->send(200, "text/html",
+		"<html><head></head><body>"
+		"<p>Done. You can leave now.</p>"
+		"</body></html>"
+	);
 
 	config.status = done;
 }

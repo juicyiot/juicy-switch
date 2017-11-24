@@ -18,8 +18,9 @@ void setup() {
 	// Try to connect using persisted credentials.
 	// If the connection failes, setup a configuration AP
 	// that blocks until new credentials have been provided
-	// and we are connected to the local network.
-	if (!connection.connect(false)) {
+	// and we are successfully connected to the local network.
+	connection.disconnect(true);
+	if (!connection.connect()) {
 		config.setup();
 		config.run();
 	}
