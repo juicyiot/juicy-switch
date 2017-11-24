@@ -9,6 +9,7 @@ void HttpHandler::handleRoot() {
 		return;
 	}
 	webServer->send(200, "text/html",
+		"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 		"<html><head></head><body>"
 		"<h1>Welcome to your Juicy Socket</h1>"
 		"<p>Click <a href='/setup'>here</a> to set up the socket's WiFi connection.</p>"
@@ -23,6 +24,7 @@ void HttpHandler::handleSetup() {
 	// Todo: Scan and display available WiFi networks.
 
 	webServer->send(200, "text/html",
+		"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 		"<html><head></head><body>"
 		"<h2>Select your WiFi network</h2>"
 		"<form method='POST' action='save'>"
@@ -38,6 +40,7 @@ void HttpHandler::handleSetup() {
 
 void HttpHandler::handleSave() {
 	webServer->send(200, "text/html",
+		"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
 		"<p>Click here <a href='/status'>here</a> after a couple of seconds to check the connection status.</p>"
@@ -61,6 +64,7 @@ void HttpHandler::handleSave() {
 void HttpHandler::handleStatus() {
 	if (config.status == successful) {
 		webServer->send(200, "text/html",
+			"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 			"<html><head></head><body>"
 			"<h2>Connection Successful</h2>"
 			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
@@ -68,6 +72,7 @@ void HttpHandler::handleStatus() {
 		);
 	} else if (config.status == failed) {
 		webServer->send(200, "text/html",
+			"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 			"<html><head></head><body>"
 			"<h2>Connection Failed. <a href='/setup'>Try again!</a></h2>"
 			"</body></html>"
@@ -77,6 +82,7 @@ void HttpHandler::handleStatus() {
 
 void HttpHandler::handleClose() {
 	webServer->send(200, "text/html",
+		"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 		"<html><head></head><body>"
 		"<p>Done. You can leave now.</p>"
 		"</body></html>"
