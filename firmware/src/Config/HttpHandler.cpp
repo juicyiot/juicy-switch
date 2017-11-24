@@ -44,6 +44,7 @@ void HttpHandler::handleSave() {
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
 		"<p>The LED will light up for two seconds to signal a success. It will blink two times to signal a failure.</p>"
+		"<p>This will take a couple of seconds.</p>"
 		"<p>Click here <a href='/status'>here</a> after the LED feedback to resume.</p>"
 		"</body></html>"
 	);
