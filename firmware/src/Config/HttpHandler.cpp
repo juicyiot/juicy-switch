@@ -2,7 +2,7 @@
 
 #include "ConfigServer.h"
 
-HttpHandler::HttpHandler(std::unique_ptr<ESP8266WebServer> &webServer, ConfigServer &config) : webServer(webServer), config(config) {};
+HttpHandler::HttpHandler(std::unique_ptr<ESP8266WebServer> &webServer, ConfigServer &config) : webServer(webServer), config(config) { };
 
 void HttpHandler::handleRoot() {
 	if (captivePortal()) {
@@ -43,8 +43,8 @@ void HttpHandler::handleSave() {
 		"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 		"<html><head></head><body>"
 		"<h2>Connecting...</h2>"
-		"<p>Click here <a href='/status'>here</a> after a couple of seconds to check the connection status.</p>"
-		// "<script type='text/javascript'>setTimeout(function(){window.location.reload(1);},3000);</script>"
+		"<p>The LED will light up for two seconds to signal a success. It will blink two times to signal a failure.</p>"
+		"<p>Click here <a href='/status'>here</a> after the LED feedback to resume.</p>"
 		"</body></html>"
 	);
 
@@ -54,7 +54,6 @@ void HttpHandler::handleSave() {
 	if (ssidIsThere && passwordIsThere) {
 		String ssid = webServer->arg("ssid");
 		String password = webServer->arg("password");
-		Serial.println("Try to connect using: " + ssid + password);
 		strncpy(config.networkCredentials.ssid, ssid.c_str(), CREDENTIAL_SIZE);
 		strncpy(config.networkCredentials.password, password.c_str(), CREDENTIAL_SIZE);
 		config.shouldConnect = true;
@@ -70,7 +69,7 @@ void HttpHandler::handleStatus() {
 			"<p>Your all set up now. <a href='/close'>Click here</a> to finish the configuration.</p>"
 			"</body></html>"
 		);
-	} else if (config.status == failed) {
+	} else {
 		webServer->send(200, "text/html",
 			"<meta name='viewport' content='width=device-width, initial-scale=1'>"
 			"<html><head></head><body>"
@@ -96,15 +95,6 @@ void HttpHandler::handleNotFound() {
 		return;
 	}
 	webServer->send(200, "text/plain", "juicy config: not found");
-}
-
-void HttpHandler::initializeConnection() {
-	webServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	webServer->sendHeader("Pragma", "no-cache");
-	webServer->sendHeader("Expires", "-1");
-	webServer->setContentLength(CONTENT_LENGTH_UNKNOWN);
-	webServer->send(200, "text/html", "");
-	webServer->sendContent("<meta name='viewport' content='width=device-width, initial-scale=1'>");
 }
 
 bool HttpHandler::captivePortal() {

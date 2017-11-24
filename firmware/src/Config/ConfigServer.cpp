@@ -14,6 +14,27 @@ ConfigServer::ConfigServer(const char *ssid, const char *password) {
 
 	status = none;
 	shouldConnect = false;
+
+	connectionSuccessCallback = []() {
+		pinMode(LED_BUILTIN, OUTPUT);
+		digitalWrite(LED_BUILTIN, HIGH);
+
+		digitalWrite(LED_BUILTIN, LOW);
+		delay(2000);
+		digitalWrite(LED_BUILTIN, HIGH);
+	};
+
+	connectionFailureCallback = []() {
+		pinMode(LED_BUILTIN, OUTPUT);
+		digitalWrite(LED_BUILTIN, HIGH);
+
+		for (int i = 0; i < 2; i++) {
+			digitalWrite(LED_BUILTIN, LOW);
+			delay(500);
+			digitalWrite(LED_BUILTIN, HIGH);
+			delay(500);
+		}
+	};
 }
 
 void ConfigServer::setup() {
@@ -49,10 +70,11 @@ void ConfigServer::run() {
 			shouldConnect = false;
 
 			status = connectToNetwork() ? successful : failed;
+
 			if (status == successful) {
-				Serial.println("Connection successful.");
+				connectionSuccessCallback();
 			} else {
-				Serial.println("Connection failed.");
+				connectionFailureCallback();
 			}
 		}
 	}
@@ -66,6 +88,7 @@ bool ConfigServer::connectToNetwork() {
 
 	if (connection.connect()) {
 		connection.persistCredentials();
+
 		return true;
 	}
 
