@@ -105,6 +105,7 @@ bool HttpHandler::captivePortal() {
 		webServer->sendHeader("Location", String("http://") + toString(webServer->client().localIP()), true);
 		webServer->send(302, "text/plain", "");
 		webServer->client().stop();
+
 		return true;
 	}
 
@@ -118,6 +119,7 @@ bool HttpHandler::isIPAddress(String str) {
       		return false;
     	}
   	}
+
   	return true;
 }
 
@@ -127,5 +129,6 @@ String HttpHandler::toString(IPAddress ip) {
 	  res += String((ip >> (8 * i)) & 0xFF) + ".";
   }
   res += String(((ip >> 8 * 3)) & 0xFF);
+  
   return res;
 }
