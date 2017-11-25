@@ -62,22 +62,22 @@ You can also shut down your chip now. If you power it up again it will remember 
 #### Configure and Setup
 
 ``` c++
-	// Create an API instance with a certain hostname.
-	API api("juicy_hostname");
+// Create an API instance with a certain hostname.
+API api("juicy_hostname");
 	
-	// Add a PIN that will be toggled by the API.
-	// The first parameter is the pin.
-	// The second parameter is the ON value.
-	// The second parameter is the OFF value.
-	api.addPin(LED_BUILTIN, LOW, HIGH);
+// Add a PIN that will be toggled by the API.
+// The first parameter is the pin.
+// The second parameter is the ON value.
+// The second parameter is the OFF value.
+api.addPin(LED_BUILTIN, LOW, HIGH);
 	
-	// After adding all desired pins, stup the API.
-	api.setup();
+// After adding all desired pins, stup the API.
+api.setup();
 	
-	/* Later on in your main loop() */
+/* Later on in your main loop() */
 	
-	// Serve the API.
-	api.serve();
+// Serve the API.
+api.serve();
 ```
 
 #### Endpoints
