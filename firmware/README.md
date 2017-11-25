@@ -32,6 +32,8 @@ The easiest way to get the Juicy firmware up and running on your esp chip is usi
 
 Assuming you have just flashed the firmware onto your esp chip and not connected it to your WiFi before you can use your phone or another WiFi enabled device to configure the chip:
 
+![Configuration flow](doc/img/flow.png "Juciy coniguration flow")
+
 1. Make sure the chip is powered on.
 2. Connect to the Juicy configuration network (`juicy_switch`) using your phone or another device.
 3. Once you connected to the Juicy configuration network, a captive portal dialogue displaying the Juicy configuration page may appear.
@@ -49,7 +51,7 @@ Assuming you have just flashed the firmware onto your esp chip and not connected
 8. Follow the instructions on the Juicy configuration page. If the connection failed, you'll be given a link to retype the credentials of your WiFi. If the connection succeeded, you'll be given a link to finish the configuration process.
 9. Once you finished the configuration process, your chip will be connected to your WiFi and the Juicy configuration network will be closed.
 
-Congratulation, Juicy is now setup and ready to go. You can use `nmap` to find out it's IP or just access it via `juicy_switch.local`. It's recommended to use the IP directly since it seems to be faster.
+Congratulations, Juicy is now setup and ready to go. You can use `nmap` to find out it's IP or just access it via `juicy_switch.local`. It's recommended to use the IP directly since it seems to be faster.
 
 You can also shut down your chip now. If you power it up again it will remember your WiFi network's credentials and automatically connect to it on startup. If you change your WiFi credentials, just restart the chip. It will notice that the old credentials do not work anymore and reopen the Juicy configuration network for you to provide the new credentials.
 
