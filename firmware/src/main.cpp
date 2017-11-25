@@ -26,6 +26,7 @@ void setup() {
 
 	Serial.print("Connected to " + connection.getSSID() + ". Local IP: " + connection.getIP());
 
+	api.addPin(LED_BUILTIN, LOW, HIGH);
 	api.setup();
 }
 
