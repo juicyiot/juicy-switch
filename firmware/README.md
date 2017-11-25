@@ -57,6 +57,46 @@ You can also shut down your chip now. If you power it up again it will remember 
 
 **Note:** Your WiFi's credentials will be stored on the esp chip in *plain text* (unencrypted). 
 
+### API
+
+#### Configure and Setup
+
+``` c++
+	// Create an API instance with a certain hostname.
+	API api("juicy_hostname");
+	
+	// Add a PIN that will be toggled by the API.
+	// The first parameter is the pin.
+	// The second parameter is the ON value.
+	// The second parameter is the OFF value.
+	api.addPin(LED_BUILTIN, LOW, HIGH);
+	
+	// After adding all desired pins, stup the API.
+	api.setup();
+	
+	/* Later on in your main loop() */
+	
+	// Serve the API.
+	api.serve();
+```
+
+#### Endpoints
+
+The API serves the following endpoints:
+
+``` shell
+# Writes the previously specified ON value to all added pins.
+curl juicy_switch.local/on
+
+# Writes the previously specified OFF value to all added pins.
+curl juicy_switch.local/off
+
+# Returns a JSON containing a `status` value that is either:
+# - `on` if all pins are on
+# - `off` if all pins are off
+# - `undefined` if no common pin status could be determined.
+curl juicy_switch.local/status
+```
 
 
  
