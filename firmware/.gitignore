@@ -1,0 +1,8 @@
+# PlatformIO IDE
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+
+# macOS
+*.DS_Store
