@@ -2,7 +2,7 @@
 
 ⚠️ **This is work in progress!** ⚠️
 
-The firmware powering Juicy's *esp* chip. It lets you configure the WiFi that Juicy should connect to and provides a RESTful API for controlling the chip's LED. Later, when Juicy is fully assembled, you will be able to power the socket on and off via that API.
+The firmware powering Juicy's *esp* chip. It lets you configure the WiFi that Juicy should connect to and provides a RESTful API for controlling the chip's LED. Later, when Juicy is fully assembled, you will be able to power the switch on and off via that API.
 
 ## Features
 
