@@ -1,6 +1,6 @@
 # Juicy Switch Firmware 🔌 🍊 💻
 
-[![Build Status](https://travis-ci.org/juicyiot/juicy-switch.svg?branch=feature%2Ftravis)](https://travis-ci.org/juicyiot/juicy-switch)
+[![Build Status](https://travis-ci.org/juicyiot/juicy-switch.svg?branch=master)](https://travis-ci.org/juicyiot/juicy-switch)
 
 ⚠️ **This is work in progress!** ⚠️
 
