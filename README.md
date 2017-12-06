@@ -1,4 +1,7 @@
 # Juicy Switch :electric_plug::tangerine:
+
+[![Build Status](https://travis-ci.org/juicyiot/juicy-switch.svg?branch=feature%2Ftravis)](https://travis-ci.org/juicyiot/juicy-switch)
+
 A **RESTful** power **switch**.
 The Juicy Switch enables you to turn a 230VAC device **on** and **off** using **HTTP**. E.g. you can switch a :bulb: on by calling `http://juicy.local/on`
 and turn it off with `http://juicy.local/off`.
