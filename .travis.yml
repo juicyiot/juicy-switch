@@ -14,4 +14,4 @@ install:
     - pip install -U platformio
 
 script:
-    - platformio ci --project-conf=firmware/platoformio.ini
+    - platformio ci --project-conf=firmware/platformio.ini
