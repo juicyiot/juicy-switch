@@ -1,5 +1,7 @@
 # Juicy Switch Firmware 🔌 🍊 💻
 
+[![Build Status](https://travis-ci.org/juicyiot/juicy-switch.svg?branch=master)](https://travis-ci.org/juicyiot/juicy-switch)
+
 ⚠️ **This is work in progress!** ⚠️
 
 The firmware powering Juicy's *esp* chip. It lets you configure the WiFi that Juicy should connect to and provides a RESTful API for controlling the chip's LED. Later, when Juicy is fully assembled, you will be able to power the switch on and off via that API.
