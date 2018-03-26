@@ -36,25 +36,6 @@ The cost per unit is roughly 10$.
 | S1         | tactile switch   | SMD (4x4x1.5mm)   | -             |
 | J1,J2,J4,J6 | Headers         | THT               | -             |
 
-We bought most parts from Aliexpress (various suppliers).
-
-### Buy
-| C3         | capacitor        | SMD         | 100µF
-| R7         | varistor         | THT         | 250VAC/2500A  | eBay |
-| J3,J5      | screw terminal   | THT         | 5m            | TODO                |
-| F1         | fuse (slow blow) | Glass tube 5x20mm | 0.3A    |  |
-| F2         | fuse (fast blow) | Glass tube 5x20mm | 6.3A    |  |
-| F1,F2      | fuse holder      | THT 5x20mm        | -       | |
-| K1         | relay            | -                 | 10A/250VAC     | - |
-
-### PCB
-
-#### Safety
-Fuses
-Varistor
-Creepage
-Load
-
 #### Schematic
 ![](hardware/schematic.png "Gerber view top")
 
@@ -74,10 +55,10 @@ Seeedstudio manufactured our board (2 layer and 1oz of copper).
 The PCB **must** be enclosed by a **plastic** box. Use **non conducting** materials, e.g. plastic standoffs. The box should be kept in a dry environment (inside). Do not open the box while connected to mains, always unplug first.
 
 ### Sources
-https://esp8266.github.io/Arduino/versions/2.3.0/doc/boards.html
-http://www.learnabout-electronics.org/PSU/psu10.php
-http://circuitcalculator.com/wordpress/2006/01/31/pcb-trace-width-calculator/
-http://lygte-info.dk/review/Power%20Mains%20to%205V%200.6A%20Hi-Link%20HLK-PM01%20UK.html
-https://forum.mysensors.org/topic/1607/safe-in-wall-ac-to-dc-transformers
-http://www.reo.co.uk/files/safety_7_-_low_voltage_directive.pdf
-http://creepage.com/
+- https://esp8266.github.io/Arduino/versions/2.3.0/doc/boards.html
+- http://www.learnabout-electronics.org/PSU/psu10.php
+- http://circuitcalculator.com/wordpress/2006/01/31/pcb-trace-width-calculator/
+- http://lygte-info.dk/review/Power%20Mains%20to%205V%200.6A%20Hi-Link%20HLK-PM01%20UK.html
+- https://forum.mysensors.org/topic/1607/safe-in-wall-ac-to-dc-transformers
+- http://www.reo.co.uk/files/safety_7_-_low_voltage_directive.pdf
+- http://creepage.com/

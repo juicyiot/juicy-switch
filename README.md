@@ -16,7 +16,7 @@ We designed the PCB to the best of our knowledge to be safe (see [Safety](hardwa
 - Easy to setup and to use (your mom can use it :wink:)
 - Simple yet powerful :rocket:
 
-The Juicy Switch can be self assembled and is affordable, see [Bill of Materials](hardware/README.md#bill-of-materials). The setup is a friction less and quick process. After the device is powered up, it will create a WIFI hotspot called `juicy_switch`. Connect with your Smartphone/Notebook and proceed with the one time [Setup](firmware/README.md#setup). Eventhough the switch is very simple to use, many *smart* use cases can be built on top, see [Use Case Ideas](#use-case-ideas) to get inspired.
+The Juicy Switch can be self assembled and is affordable, see [Bill of Materials](hardware/README.md#bill-of-materials). The setup is a friction less and quick process. After the device is powered up, it will create a WIFI hotspot called `juicy_switch`. Connect with your Smartphone/Notebook and proceed with the one time [Setup](firmware/README.md#usage). Eventhough the switch is very simple to use, many *smart* use cases can be built on top, see [Use Case Ideas](#use-case-ideas) to get inspired.
 
 ## Hardware
 Head over to the dedicated [Hardware-Readme](hardware/README.md#setup)
@@ -29,6 +29,6 @@ October 2017: PCB got produced and has been shipped.
 January 2018: PCB soldered but found an issue
 
 ## Use Case Ideas
-### Calendar
-### IFTTT
-### Google Home
+- Calendar
+- IFTTT
+- Google Home
