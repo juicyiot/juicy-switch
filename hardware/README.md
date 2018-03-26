@@ -37,13 +37,13 @@ The cost per unit is roughly 10$.
 | J1,J2,J4,J6 | Headers         | THT               | -             |
 
 #### Schematic
-![](hardware/schematic.png "Gerber view top")
+![](v2/schematic.png "Schematic")
 
 #### Board
 Seeedstudio manufactured our board (2 layer and 1oz of copper).
 
-![](hardware/gerber-top.png "Gerber view top")
-![](hardware/gerber-bottom.png "Gerber view bottom")
+![](v2/gerber-top.png "Gerber view top")
+![](v2/gerber-bottom.png "Gerber view bottom")
 
 ### Assembly
 - Solder the ESP and related resistors/capcitors.
