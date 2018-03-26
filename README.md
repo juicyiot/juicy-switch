@@ -8,7 +8,7 @@ and turn it off with `http://juicy.local/off`.
 
 ## :warning: Disclaimer :zap:
 Mains can kill or severly injure people! Please read about electrical saftey first.
-We designed the PCB to the best of our knowledge to be safe (see [Safety](hardware/Readme.md#safety) and [Enclosure](hardware/Readme.md#enclosure)), however **use it at your own risk**, we are no electrical engineers!
+We designed the PCB to the best of our knowledge to be safe (see [Safety](hardware/README.md#safety) and [Enclosure](hardware/Readme.md#enclosure)), however **use it at your own risk**, we are no electrical engineers!
 
 ## Design goals
 - DIY (do it yourself) :hammer:
@@ -16,13 +16,13 @@ We designed the PCB to the best of our knowledge to be safe (see [Safety](hardwa
 - Easy to setup and to use (your mom can use it :wink:)
 - Simple yet powerful :rocket:
 
-The Juicy Switch can be self assembled and is affordable, see [Bill of Materials](hardware/Readme.md#bill-of-materials). The setup is a friction less and quick process. After the device is powered up, it will create a WIFI hotspot called `juicy_switch`. Connect with your Smartphone/Notebook and proceed with the one time [Setup](firmware/Readme.md#setup). Eventhough the switch is very simple to use, many *smart* use cases can be built on top, see [Use Case Ideas](#use-case-ideas) to get inspired.
+The Juicy Switch can be self assembled and is affordable, see [Bill of Materials](hardware/README.md#bill-of-materials). The setup is a friction less and quick process. After the device is powered up, it will create a WIFI hotspot called `juicy_switch`. Connect with your Smartphone/Notebook and proceed with the one time [Setup](firmware/README.md#setup). Eventhough the switch is very simple to use, many *smart* use cases can be built on top, see [Use Case Ideas](#use-case-ideas) to get inspired.
 
 ## Hardware
-Head over to the dedicated [Hardware-Readme](hardware/Readme.md#setup)
+Head over to the dedicated [Hardware-Readme](hardware/README.md#setup)
 
 ## Software
-Head over to the dedicated [Firmaware-Readme](firmware/Readme.md#setup)
+Head over to the dedicated [Firmaware-Readme](firmware/README.md#setup)
 
 ## Progress/Status
 October 2017: PCB got produced and has been shipped.
